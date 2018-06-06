@@ -1,0 +1,889 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Objective-C,," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Linco" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="MDM获取UDID的几个技术点 MDM服务 MDM - Moblie Device Management 介绍MDM的文章： https://www.jianshu.com/p/6112050ea31a MDM是服务于企业级应用的一种模式。 MDM可以突破许多App Store应用的束缚。 目前我实践的有获取UDID。">
+<meta name="keywords" content="Objective-C,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="获取UDID">
+<meta property="og:url" content="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">
+<meta property="og:site_name" content="Linco">
+<meta property="og:description" content="MDM获取UDID的几个技术点 MDM服务 MDM - Moblie Device Management 介绍MDM的文章： https://www.jianshu.com/p/6112050ea31a MDM是服务于企业级应用的一种模式。 MDM可以突破许多App Store应用的束缚。 目前我实践的有获取UDID。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="media/15280822943738/15281058755039.jpg">
+<meta property="og:image" content="media/15280822943738/15282777076222.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="获取UDID">
+<meta name="twitter:description" content="MDM获取UDID的几个技术点 MDM服务 MDM - Moblie Device Management 介绍MDM的文章： https://www.jianshu.com/p/6112050ea31a MDM是服务于企业级应用的一种模式。 MDM可以突破许多App Store应用的束缚。 目前我实践的有获取UDID。">
+<meta name="twitter:image" content="media/15280822943738/15281058755039.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://localhost:4000/"/>
+
+
+
+
+
+  <title>获取UDID | Linco</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Linco</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">YG BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linco">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            获取UDID
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T00:00:00+08:00">
+                2018-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="mdm获取udid的几个技术点">MDM获取UDID的几个技术点</h1>
+<h2 id="mdm服务">MDM服务</h2>
+<p>MDM - Moblie Device Management
+介绍MDM的文章：
+https://www.jianshu.com/p/6112050ea31a
+MDM是服务于企业级应用的一种模式。
+MDM可以突破许多App Store应用的束缚。
+目前我实践的有获取UDID。</p>
+
+<p>还有一个功能会吸引一些人：静默更新(无提示的强制更新)。这个功能我没有进行过实验和验证，是从几个方面有提示和比较可信的推论。有兴趣的可以进一步研究。</p>
+
+<h2 id="获取udid的证书">获取UDID的证书</h2>
+<p>关于如何获取手机的UDID。目前可行的方法是通过安装描述文件来获取到设备的真实UDID。
+网上已经有许多相关的文章，大多数转载自这一篇：
+http://www.skyfox.org/safari-ios-device-udid.html</p>
+
+<p>本文仅介绍iOS方面的技术点，这篇文章有关于证书上传服务器的内容。了解原理可以看看。想拿现成就用下面举例的内容，记得两点就行：1、更改自定义的内容；2、文件的格式为<code class="highlighter-rouge">.mobileconfig</code></p>
+
+<p>描述文件举例：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> &lt;!--参考:https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/iPhoneOTAConfiguration/ConfigurationProfileExamples/ConfigurationProfileExamples.html--&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+    &lt;dict&gt;
+        &lt;key&gt;PayloadContent&lt;/key&gt;
+        &lt;dict&gt;
+            &lt;key&gt;URL&lt;/key&gt;
+            &lt;string&gt;你接受数据的URL&lt;/string&gt; &lt;!--接收数据的接口地址--&gt;
+            &lt;key&gt;DeviceAttributes&lt;/key&gt;
+            &lt;array&gt;
+                &lt;string&gt;UDID&lt;/string&gt;
+                &lt;string&gt;IMEI&lt;/string&gt;
+                &lt;string&gt;ICCID&lt;/string&gt;
+                &lt;string&gt;VERSION&lt;/string&gt;
+                &lt;string&gt;PRODUCT&lt;/string&gt;
+            &lt;/array&gt;
+        &lt;/dict&gt;
+        &lt;key&gt;PayloadOrganization&lt;/key&gt;
+        &lt;string&gt;安装显示的组织者&lt;/string&gt;  &lt;!--组织名称--&gt;
+        &lt;key&gt;PayloadDisplayName&lt;/key&gt;
+        &lt;string&gt;安装显示标题&lt;/string&gt;  &lt;!--安装时显示的标题--&gt;
+        &lt;key&gt;PayloadVersion&lt;/key&gt;
+        &lt;integer&gt;1&lt;/integer&gt;
+        &lt;key&gt;PayloadUUID&lt;/key&gt;
+        &lt;string&gt;十六进制，格式为:8-4-4-4-12&lt;/string&gt;  &lt;!--自己随机填写的唯一字符串--&gt;
+        &lt;key&gt;PayloadIdentifier&lt;/key&gt;
+        &lt;string&gt;你的标识符&lt;/string&gt;
+        &lt;key&gt;PayloadDescription&lt;/key&gt;
+        &lt;string&gt;安装显示内容&lt;/string&gt;   &lt;!--描述--&gt;
+        &lt;key&gt;PayloadType&lt;/key&gt;
+        &lt;string&gt;Profile Service&lt;/string&gt;
+    &lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre>
+</div>
+
+<p><img src="media/15280822943738/15281058755039.jpg" alt="" /></p>
+
+<p>关于获取UDID的配置文件有上述的格式。
+<code class="highlighter-rouge">URL</code>是把UDID发送给服务器的接口
+<code class="highlighter-rouge">array</code>里面的信息是获取的设备信息
+<code class="highlighter-rouge">PayloadOrganization</code>是组织者标识
+<code class="highlighter-rouge">PayloadDisplayName</code>是显示的标题
+<code class="highlighter-rouge">PayloadDescription</code>是显示的描述</p>
+
+<h2 id="证书的签名">证书的签名</h2>
+<p>关于证书的签名有两种方式：使用SSL证书来进行签名；使用描述文件来进行签名</p>
+
+<p>我在处理的过程中使用的是SSL证书来进行签名。
+最好准备有如下六个文件：
+<code class="highlighter-rouge">ca.crt</code>  额，根证书
+<code class="highlighter-rouge">ssl.crt</code> 公钥
+<code class="highlighter-rouge">ssl.pem</code> 公钥的一种格式，还是公钥
+<code class="highlighter-rouge">ssl.key</code> 私钥
+<code class="highlighter-rouge">unsign.mobileconfig</code> 未签名配置文件
+<code class="highlighter-rouge">sign.mobileconfig</code> 已签名配置文件（占位作用，实际是未签名文件拷贝的）</p>
+
+<p><strong>注意的是SSL证书的颁发机构要和CA证书是同一家。</strong></p>
+
+<p>简单介绍一下<code class="highlighter-rouge">ssl.crt</code>和<code class="highlighter-rouge">ssl.pem</code>。<code class="highlighter-rouge">ssl.crt</code>和<code class="highlighter-rouge">ssl.pem</code>是可以互相导出的。
+这两个文件内容是一样的。区别在于格式。这个文件其实是ssl证书的私钥。pem是一种格式。一般情况下默认是这种格式。</p>
+
+<p>###ca.crt如何获取
+我在使用中用了两家公司的。一个是<code class="highlighter-rouge">symantec</code> <code class="highlighter-rouge">GeoTrust</code>。其实不论哪一家，都是可以获取到的，网上有很多方法，现在介绍一种简单粗暴的。
+Chrome中，访问官网，然后通过点击浏览器输入框的<code class="highlighter-rouge">https:/****</code>前的锁。来找到证书。拖动详情里的证书可以保存在电脑。(我改机构后使用的证书是和知乎的一样是RSA,GeoTrust官网的是SHA2。这个状态是补这篇博客的时候测试的)
+<img src="media/15280822943738/15282777076222.jpg" alt="" />
+如果获取的证书的格式不正确，可以转换格式。转<code class="highlighter-rouge">.pem</code>来保证后续处理。</p>
+
+<p>ssl文件需要服务器的同事去请求。</p>
+
+<p>文件准备全之后。打开终端，进入到存放这些证书的文件夹。执行如下的命令</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>openssl smime -sign -in sign.mobileconfig -out sign.mobileconfig -signer ssl.crt -inkey ssl.key -certfile ca.crt -outform der -nodetach
+</code></pre>
+</div>
+<p>上面的<code class="highlighter-rouge">crt文件</code>都可以改为<code class="highlighter-rouge">pem文件</code>.</p>
+
+<h2 id="关于签名和未签名">关于签名和未签名</h2>
+<p>签名后的证书在安装的时候是绿色。未签名的证书是红色。
+签名的证书如果过期之后，浏览器可能显示出证书内容，是乱码。
+未签名证书也有可能被浏览器展示出来，是明文。</p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Objective-C%2C" rel="tag"># Objective-C,</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/" rel="prev" title="长图、截图、绘图">
+                长图、截图、绘图 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+           
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#mdm获取udid的几个技术点"> <span class="nav-number">1</span> <span class="nav-text">MDM获取UDID的几个技术点</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#mdm服务"> <span class="nav-number">1.1</span> <span class="nav-text">MDM服务</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#获取udid的证书"> <span class="nav-number">1.2</span> <span class="nav-text">获取UDID的证书</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#证书的签名"> <span class="nav-number">1.3</span> <span class="nav-text">证书的签名</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#关于签名和未签名"> <span class="nav-number">1.4</span> <span class="nav-text">关于签名和未签名</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

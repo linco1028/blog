@@ -83,7 +83,7 @@
 <link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="" />
+  <meta name="keywords" content="Objective-C,," />
 
 
 
@@ -111,17 +111,17 @@
 
 
 
-<meta name="description" content="This post is used for testing tag plugins. See docs for more info.">
-<meta name="keywords" content="Jekyll, NexT">
+<meta name="description" content="细说ReactiveCocoa的冷信号与热信号（一）">
+<meta name="keywords" content="Objective-C,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Block">
-<meta property="og:url" content="http://localhost:4000/foo/2013/12/25/block/">
+<meta property="og:title" content="细说ReactiveCocoa的冷信号与热信号（一）">
+<meta property="og:url" content="http://localhost:4000/2018/02/02/RAC1/">
 <meta property="og:site_name" content="Linco">
-<meta property="og:description" content="This post is used for testing tag plugins. See docs for more info.">
+<meta property="og:description" content="细说ReactiveCocoa的冷信号与热信号（一）">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Block">
-<meta name="twitter:description" content="This post is used for testing tag plugins. See docs for more info.">
+<meta name="twitter:title" content="细说ReactiveCocoa的冷信号与热信号（一）">
+<meta name="twitter:description" content="细说ReactiveCocoa的冷信号与热信号（一）">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -154,7 +154,7 @@
 
 
 
-  <title>Block | Linco</title>
+  <title>细说ReactiveCocoa的冷信号与热信号（一） | Linco</title>
   
 
 
@@ -280,7 +280,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://localhost:4000/foo/2013/12/25/block/">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2018/02/02/RAC1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -300,7 +300,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            Block
+            细说ReactiveCocoa的冷信号与热信号（一）
           
         </h1>
         
@@ -314,8 +314,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-12-25T08:14:39+08:00">
-                2013-12-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T00:00:00+08:00">
+                2018-02-02
               </time>
             
 
@@ -324,29 +324,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Foo" itemprop="url" rel="index">
-                    <span itemprop="name">Foo</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -378,53 +355,142 @@
       
 
       
-        <p>This post is used for testing tag plugins. See <a href="http://zespia.tw/hexo/docs/tag-plugins.html">docs</a> for more info.</p>
+        <h1 id="细说reactivecocoa的冷信号与热信号一">细说ReactiveCocoa的冷信号与热信号（一）</h1>
 
-<h2 id="block-quote">Block Quote</h2>
+<p><strong>背景</strong></p>
 
-<h3 id="normal-blockquote">Normal blockquote</h3>
+<p><a href="http://www.github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>（简称RAC）是最初由GitHub团队开发的一套基于Cocoa的FRP框架。FRP即Functional Reactive Programming（函数式响应式编程），其优点是用随时间改变的函数表示用户输入，这样就不需要可变状态了。我们之前的文章“<a href="http://tech.meituan.com/RACSignalSubscription.html">RACSignal的Subscription深入分析</a>”里曾经详细讲解过RAC核心概念之一RACSignal的实现原理。在美团客户端中，我们大量使用了这个框架。冷信号与热信号的概念很容易混淆并造成一定的问题。鉴于这个问题具有一定普遍性，我将用一系列文章讲解RAC中冷信号与热信号的相关知识点，希望可以加深大家的理解。本文是系列文章的第一篇。</p>
 
-<blockquote>
-  <p>Praesent diam elit, interdum ut pulvinar placerat, imperdiet at magna.</p>
-</blockquote>
+<p>p.s. 以下代码和示例基于<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/releases/tag/v2.5">ReactiveCocoa v2.5</a>。</p>
 
-<h2 id="code-block">Code Block</h2>
+<p><strong>什么是冷信号与热信号</strong></p>
 
-<h3 id="inline-code-block">Inline code block</h3>
+<p>冷热信号的概念源于.NET框架<a href="https://msdn.microsoft.com/en-us/library/hh242985.aspx">Reactive Extensions(RX)</a>中的Hot Observable和Cold Observable，两者的区别是：</p>
 
-<p>This is a inline code block: <code class="highlighter-rouge">python</code>, <code class="highlighter-rouge">print 'helloworld'</code>.</p>
+<ol>
+  <li>
+    <p>Hot Observable是主动的，尽管你并没有订阅事件，但是它会时刻推送，就像鼠标移动；而Cold Observable是被动的，只有当你订阅的时候，它才会发布消息。</p>
+  </li>
+  <li>
+    <p>Hot Observable可以有多个订阅者，是一对多，集合可以与订阅者共享信息；而Cold Observable只能一对一，当有不同的订阅者，消息是重新完整发送。</p>
+  </li>
+</ol>
 
-<h3 id="normal-code-block">Normal code block</h3>
+<p>这里面的Observables可以理解为RACSignal。为了加深理解，我们来看这样的几组代码：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>alert('Hello World!');
+<div class="highlighter-rouge"><pre class="highlight"><code>RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id subscriber) {
+    [subscriber sendNext:@1];
+    [subscriber sendNext:@2];
+    [subscriber sendNext:@3];
+    [subscriber sendCompleted];
+    return nil;
+}];
+NSLog(@"Signal was created.");
+[[RACScheduler mainThreadScheduler] afterDelay:0.1 schedule:^{
+    [signal subscribeNext:^(id x) {
+        NSLog(@"Subscriber 1 recveive: %@", x);
+    }];
+}];
+[[RACScheduler mainThreadScheduler] afterDelay:1 schedule:^{
+    [signal subscribeNext:^(id x) {
+        NSLog(@"Subscriber 2 recveive: %@", x);
+    }];
+}];
 </code></pre>
 </div>
+<p>以上简单地创建了一个信号，并且依次发送@1，@2，@3作为值。下面分别有两个订阅者在不同的时间段进行了订阅，运行的结果如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>print "Hello world"
+<div class="highlighter-rouge"><pre class="highlight"><code>2015-08-11 18:33:21.681 RACDemos[6505:1125196] Signal was created.
+2015-08-11 18:33:21.793 RACDemos[6505:1125196] Subscriber 1 recveive: 1
+2015-08-11 18:33:21.793 RACDemos[6505:1125196] Subscriber 1 recveive: 2
+2015-08-11 18:33:21.793 RACDemos[6505:1125196] Subscriber 1 recveive: 3
+2015-08-11 18:33:22.683 RACDemos[6505:1125196] Subscriber 2 recveive: 1
+2015-08-11 18:33:22.683 RACDemos[6505:1125196] Subscriber 2 recveive: 2
+2015-08-11 18:33:22.683 RACDemos[6505:1125196] Subscriber 2 recveive: 3
 </code></pre>
 </div>
+<p>我们可以看到，信号在18:33:21.681时被创建，18:33:21.793依次接到1、2、3三个值，而在18:33:22.683再依次接到1、2、3三个值。说明了变量名为signal的这个信号，在两个不同时间段的订阅过程中，分别完整地发送了所有的消息。</p>
 
-<h3 id="highlight-code-block">Highlight code block</h3>
+<p>我们再对这段代码进行一个小的改动：</p>
 
-<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">print</span> <span class="s">"Hello world"</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>RACMulticastConnection *connection = [[RACSignal createSignal:^RACDisposable *(id subscriber) {
+    [[RACScheduler mainThreadScheduler] afterDelay:1 schedule:^{
+        [subscriber sendNext:@1];
+    }];
+    [[RACScheduler mainThreadScheduler] afterDelay:2 schedule:^{
+        [subscriber sendNext:@2];
+    }];
+    [[RACScheduler mainThreadScheduler] afterDelay:3 schedule:^{
+        [subscriber sendNext:@3];
+    }];
+    [[RACScheduler mainThreadScheduler] afterDelay:4 schedule:^{
+        [subscriber sendCompleted];
+    }];
+    return nil;
+}] publish];
+[connection connect];
+RACSignal *signal = connection.signal;
+NSLog(@"Signal was created.");
+[[RACScheduler mainThreadScheduler] afterDelay:1.1 schedule:^{
+    [signal subscribeNext:^(id x) {
+        NSLog(@"Subscriber 1 recveive: %@", x);
+    }];
+}];
+[[RACScheduler mainThreadScheduler] afterDelay:2.1 schedule:^{
+    [signal subscribeNext:^(id x) {
+        NSLog(@"Subscriber 2 recveive: %@", x);
+    }];
+}];
 </code></pre>
 </div>
+<p>稍微有些复杂，我们来一一分析：</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">foo</span>
-  <span class="nb">puts</span> <span class="s1">'foo'</span>
-<span class="k">end</span></code></pre></figure>
+<p>创建了一个信号，在1秒、2秒、3秒分别发送1、2、3这三个值，4秒发送结束信号。</p>
 
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><table style="border-spacing: 0"><tbody><tr><td class="gutter gl" style="text-align: right"><pre class="lineno">1
-2
-3</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">foo</span>
-  <span class="nb">puts</span> <span class="s1">'foo'</span>
-<span class="k">end</span><span class="w">
-</span></pre></td></tr></tbody></table></code></pre></figure>
+<p>对这个信号调用publish方法得到一个RACMulticastConnection。</p>
 
-<h3 id="gist">Gist</h3>
+<p>让connection进行连接操作。</p>
 
-<script src="https://gist.github.com/996818.js"> </script>
+<p>获得connection的信号。</p>
 
+<p>分别在1.1秒和2.1秒订阅获得的信号。</p>
+
+<p>抛开RACMulticastConnection是个什么东东，我们先来看下结果：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>2015-08-12 11:07:49.943 RACDemos[9418:1186344] Signal was created.
+2015-08-12 11:07:52.088 RACDemos[9418:1186344] Subscriber 1 recveive: 2
+2015-08-12 11:07:53.044 RACDemos[9418:1186344] Subscriber 1 recveive: 3
+2015-08-12 11:07:53.044 RACDemos[9418:1186344] Subscriber 2 recveive: 3
+</code></pre>
+</div>
+<p>首先告诉大家- [RACSignal publish]、- [RACMulticastConnection connect]、- [RACMulticastConnection signal]这几个操作生成了一个热信号。</p>
+
+<p>我们再来关注下输出结果的一些细节：</p>
+
+<ul>
+  <li>
+    <p>信号在11:07:49.943被创建</p>
+  </li>
+  <li>
+    <p>11:07:52.088时订阅者1才收到2这个值，说明1这个值没有接收到，时间间隔是2秒多</p>
+  </li>
+  <li>
+    <p>11:07:53.044时订阅者1和订阅者2同时收到3这个值，时间间隔是3秒多</p>
+  </li>
+</ul>
+
+<p>参考一开始的Hot Observables的论述和两段小程序的输出结果，我们可以确定冷热信号的如下特点：</p>
+
+<ol>
+  <li>
+    <p><strong>热信号是主动的，即使你没有订阅事件，它仍然会时刻推送</strong>。如第二个例子，信号在50秒被创建，51秒的时候1这个值就推送出来了，但是当时还没有订阅者。<strong>而冷信号是被动的，只有当你订阅的时候，它才会发送消息</strong>。如第一个例子。</p>
+  </li>
+  <li>
+    <p><strong>热信号可以有多个订阅者，是一对多，信号可以与订阅者共享信息</strong>。如第二个例子，订阅者1和订阅者2是共享的，他们都能在同一时间接收到3这个值。<strong>而冷信号只能一对一，当有不同的订阅者，消息会从新完整发送</strong>。如第一个例子，我们可以观察到两个订阅者没有联系，都是基于各自的订阅时间开始接收消息的。</p>
+  </li>
+</ol>
+
+<p>好的，至此我们知道了什么是冷信号与热信号，了解了它们的特点。下一篇文章我们来看看为什么要区分冷信号与热信号。</p>
 
       
     </div>
@@ -452,6 +518,13 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Objective-C%2C" rel="tag"># Objective-C,</a>
+          
+        </div>
+      
 
       
       
@@ -464,8 +537,8 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/12/25/excerpts/" rel="next" title="Excerpts">
-                <i class="fa fa-chevron-left"></i> Excerpts
+              <a href="/2018/02/02/RAC2/" rel="next" title="细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号">
+                <i class="fa fa-chevron-left"></i> 细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号
               </a>
             
           </div>
@@ -474,8 +547,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2013/12/25/%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%86%E3%82%B9%E3%83%88/" rel="prev" title="日本語テスト">
-                日本語テスト <i class="fa fa-chevron-right"></i>
+              <a href="/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/" rel="prev" title="长图、截图、绘图">
+                长图、截图、绘图 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -627,7 +700,7 @@
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-2"> <a class="nav-link" href="#block-quote"> <span class="nav-number">1</span> <span class="nav-text">Block Quote</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#normal-blockquote"> <span class="nav-number">1.1</span> <span class="nav-text">Normal blockquote</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#code-block"> <span class="nav-number">2</span> <span class="nav-text">Code Block</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#inline-code-block"> <span class="nav-number">2.1</span> <span class="nav-text">Inline code block</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#normal-code-block"> <span class="nav-number">2.2</span> <span class="nav-text">Normal code block</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#highlight-code-block"> <span class="nav-number">2.3</span> <span class="nav-text">Highlight code block</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#gist"> <span class="nav-number">2.4</span> <span class="nav-text">Gist</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#细说reactivecocoa的冷信号与热信号一"> <span class="nav-number">1</span> <span class="nav-text">细说ReactiveCocoa的冷信号与热信号（一）</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
     </ol>
   </div>
             

@@ -1,0 +1,1284 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Objective-C,," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Linco" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号">
+<meta name="keywords" content="Objective-C,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号">
+<meta property="og:url" content="http://localhost:4000/2018/02/02/RAC3/">
+<meta property="og:site_name" content="Linco">
+<meta property="og:description" content="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100835_1.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100836_2.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100837_3.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100838_4.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号">
+<meta name="twitter:description" content="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100835_1.jpg">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://localhost:4000/"/>
+
+
+
+
+
+  <title>细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号 | Linco</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Linco</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">YG BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://localhost:4000/2018/02/02/RAC3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linco">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-02T00:00:00+08:00">
+                2018-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="细说reactivecocoa的冷信号与热信号三怎么处理冷信号与热信号">细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号</h1>
+
+<p><a href="http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html">第一篇文章</a>中我们介绍了冷信号与热信号的概念，<a href="http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-2.html">前一篇文章</a>我们也讨论了为什么要区分冷信号与热信号，下面我会先为大家揭晓热信号的本质，再给出冷信号转换成热信号的方法。</p>
+
+<h2 id="揭示热信号的本质">揭示热信号的本质</h2>
+
+<p>在<a href="http://www.github.com/ReactiveCocoa/ReactiveCocoa">ReactiveCocoa</a>中，究竟什么才是热信号呢？冷信号是比较常见的，<code class="highlighter-rouge">map</code>一下就会得到一个冷信号。但在RAC中，好像并没有“hot signal”这个单独的说法。原来在RAC的世界中，所有的热信号都属于一个类——<code class="highlighter-rouge">RACSubject</code>。接下来我们来看看究竟它为什么这么“神奇”。</p>
+
+<p>在RAC2.5文档的<a href="https://github.com/ReactiveCocoa/ReactiveCocoa/blob/v2.5/Documentation/FrameworkOverview.md#subjects">框架概述</a>中，有着这样一段描述：</p>
+
+<blockquote>
+  <p>A subject, represented by the RACSubject class, is a signal that can be manually controlled.</p>
+
+  <p>Subjects can be thought of as the “mutable” variant of a signal, much like NSMutableArray is for NSArray. They are extremely useful for bridging non-RAC code into the world of signals.</p>
+
+  <p>For example, instead of handling application logic in block callbacks, the blocks can simply send events to a shared subject instead. The subject can then be returned as a RACSignal, hiding the implementation detail of the callbacks.</p>
+
+  <p>Some subjects offer additional behaviors as well. In particular, RACReplaySubject can be used to buffer events for future subscribers, like when a network request finishes before anything is ready to handle the result.</p>
+</blockquote>
+
+<p>从这段描述中，我们可以发现Subject具备如下三个特点：</p>
+
+<ol>
+  <li>Subject是“可变”的。</li>
+  <li>Subject是非RAC到RAC的一个桥梁。</li>
+  <li>Subject可以附加行为，例如<code class="highlighter-rouge">RACReplaySubject</code>具备为未来订阅者缓冲事件的能力。</li>
+</ol>
+
+<p>从第三个特点来看，Subject具备为未来订阅者缓冲事件的能力，那也就说明它是自身是有状态的。根据上文的介绍，Subject是符合热信号的特点的。为了验证它，我们再来做个简单实验：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code><span class="n">RACSubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSubject</span> <span class="nf">subject</span><span class="p">];</span>
+<span class="n">RACSubject</span> <span class="o">*</span><span class="n">replaySubject</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACReplaySubject</span> <span class="nf">subject</span><span class="p">];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">1</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="c1">// Subscriber 1
+</span>    <span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 1 get a next value: %@ from subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 1 get a next value: %@ from replay subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    
+    <span class="c1">// Subscriber 2
+</span>    <span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 2 get a next value: %@ from subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 2 get a next value: %@ from replay subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+<span class="p">}];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">1</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">subject</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"send package 1"</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"send package 1"</span><span class="p">];</span>
+<span class="p">}];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">1</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="c1">// Subscriber 3
+</span>    <span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 3 get a next value: %@ from subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 3 get a next value: %@ from replay subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    
+    <span class="c1">// Subscriber 4
+</span>    <span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 4 get a next value: %@ from subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 4 get a next value: %@ from replay subject"</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+<span class="p">}];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">2</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">subject</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"send package 2"</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">replaySubject</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"send package 2"</span><span class="p">];</span>
+<span class="p">}];</span>
+</code></pre>
+</div>
+<p>按照时间线来解读一下上述代码：</p>
+
+<ol>
+  <li>0s时创建<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>这两个subject。</li>
+  <li>0.1s时<code class="highlighter-rouge">Subscriber 1</code>分别订阅了<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>。</li>
+  <li>0.1s时<code class="highlighter-rouge">Subscriber 2</code>也分别订阅了<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>。</li>
+  <li>1s时分别向<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>发送了<code class="highlighter-rouge">"send package 1"</code>这个字符串作为<strong>值</strong>。</li>
+  <li>1.1s时<code class="highlighter-rouge">Subscriber 3</code>分别订阅了<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>。</li>
+  <li>1.1s时<code class="highlighter-rouge">Subscriber 4</code>也分别订阅了<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>。</li>
+  <li>2s时再分别向<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>发送了<code class="highlighter-rouge">"send package 2"</code>这个字符串作为<strong>值</strong>。</li>
+</ol>
+
+<p>接下来看一下输出的结果：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code>    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">22</span><span class="p">.</span><span class="mi">855</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Start</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">23</span><span class="p">.</span><span class="mi">856</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">23</span><span class="p">.</span><span class="mi">856</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">2</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">23</span><span class="p">.</span><span class="mi">857</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">23</span><span class="p">.</span><span class="mi">857</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">2</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">24</span><span class="p">.</span><span class="mo">05</span><span class="mi">9</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">3</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">24</span><span class="p">.</span><span class="mo">05</span><span class="mi">9</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">4</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">1</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">03</span><span class="mi">9</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">03</span><span class="mi">9</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">2</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">03</span><span class="mi">9</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">3</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">040</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">4</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">040</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">040</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">2</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">040</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">3</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">13</span><span class="o">:</span><span class="mi">35</span><span class="o">:</span><span class="mi">25</span><span class="p">.</span><span class="mo">040</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">13646</span><span class="o">:</span><span class="mi">1269269</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">4</span> <span class="n">get</span> <span class="n">a</span> <span class="n">next</span> <span class="n">value</span><span class="o">:</span> <span class="n">send</span> <span class="n">package</span> <span class="mi">2</span> <span class="n">from</span> <span class="n">replay</span> <span class="n">subject</span>
+</code></pre>
+</div>
+<p>结合结果可以分析出如下内容：</p>
+
+<ol>
+  <li>22.855s时，测试启动，<code class="highlighter-rouge">subject</code>与<code class="highlighter-rouge">replaySubject</code>创建完毕。</li>
+  <li>23.856s时，距离启动大约1s后，<code class="highlighter-rouge">Subscriber 1</code>和<code class="highlighter-rouge">Subscriber 2</code><strong>同时</strong>从<code class="highlighter-rouge">subject</code>接收到了<code class="highlighter-rouge">"send package 1"</code>这个值。</li>
+  <li>23.857s时，也是距离启动大约1s后，<code class="highlighter-rouge">Subscriber 1</code>和<code class="highlighter-rouge">Subscriber 2</code><strong>同时</strong>从<code class="highlighter-rouge">replaySubject</code>接收到了<code class="highlighter-rouge">"send package 1"</code>这个值。</li>
+  <li>24.059s时，距离启动大约1.2s后，<code class="highlighter-rouge">Subscriber 3</code>和<code class="highlighter-rouge">Subscriber 4</code><strong>同时</strong>从<code class="highlighter-rouge">replaySubject</code>接收到了<code class="highlighter-rouge">"send package 1"</code>这个值。<strong>注意<code class="highlighter-rouge">Subscriber 3</code>和<code class="highlighter-rouge">Subscriber 4</code>并没有从<code class="highlighter-rouge">subject</code>接收<code class="highlighter-rouge">"send package 1"</code>这个值。</strong></li>
+  <li>25.039s时，距离启动大约2.1s后，<code class="highlighter-rouge">Subscriber 1</code>、<code class="highlighter-rouge">Subscriber 2</code>、<code class="highlighter-rouge">Subscriber 3</code>、<code class="highlighter-rouge">Subscriber 4</code><strong>同时</strong>从<code class="highlighter-rouge">subject</code>接收到了<code class="highlighter-rouge">"send package 2"</code>这个值。</li>
+  <li>25.040s时，距离启动大约2.1s后，<code class="highlighter-rouge">Subscriber 1</code>、<code class="highlighter-rouge">Subscriber 2</code>、<code class="highlighter-rouge">Subscriber 3</code>、<code class="highlighter-rouge">Subscriber 4</code><strong>同时</strong>从<code class="highlighter-rouge">replaySubject</code>接收到了<code class="highlighter-rouge">"send package 2"</code>这个值。</li>
+</ol>
+
+<p>只关注<code class="highlighter-rouge">subject</code>，根据时间线，我们可以得到下图：</p>
+
+<p><img src="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100835_1.jpg" alt="Alt text" /></p>
+
+<p>经过观察不难发现，4个订阅者实际上是共享<code class="highlighter-rouge">subject</code>的，一旦这个<code class="highlighter-rouge">subject</code>发送了值，当前的订阅者就会同时接收到。由于<code class="highlighter-rouge">Subscriber 3</code>与<code class="highlighter-rouge">Subscriber 4</code>的订阅时间稍晚，所以错过了第一次值的发送。这与冷信号是截然不同的反应。冷信号的图类似下图：</p>
+
+<p><img src="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100836_2.jpg" alt="Alt text" /></p>
+
+<p>对比上面两张图，是不是可以发现，<code class="highlighter-rouge">subject</code>类似“直播”，错过了就不再处理。而<code class="highlighter-rouge">signal</code>类似“点播”，每次订阅都会从头开始。所以我们有理由认定<code class="highlighter-rouge">subject</code>天然就是热信号。</p>
+
+<p>下面再来看看<code class="highlighter-rouge">replaySubject</code>，根据时间线，我们能得到另一张图：</p>
+
+<p><img src="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100837_3.jpg" alt="Alt text" /></p>
+
+<p>将图3与图1对比会发现，<code class="highlighter-rouge">Subscriber 3</code>与<code class="highlighter-rouge">Subscriber 4</code>在订阅后马上接收到了“历史值”。对于<code class="highlighter-rouge">Subscriber 3</code>和<code class="highlighter-rouge">Subscriber 4</code>来说，它们只关心“历史的值”而不关心“历史的时间线”，因为实际上<code class="highlighter-rouge">1</code>与<code class="highlighter-rouge">2</code>是间隔1s发送的，但是它们接收到的显然不是。举个生动的例子，就好像科幻电影里面主人公穿越时间线后会先把所有的回忆快速闪过再来到现实一样。（见《X战警：逆转未来》、《蝴蝶效应》）所以我们也有理由认定<code class="highlighter-rouge">replaySubject</code>天然也是热信号。</p>
+
+<p>看到这里，我们终于揭开了热信号的面纱，结论就是：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">RACSubject</code>及其子类是<strong>热信号</strong>。</li>
+  <li><code class="highlighter-rouge">RACSignal</code>排除<code class="highlighter-rouge">RACSubject</code>类以外的是<strong>冷信号</strong>。</li>
+</ol>
+
+<h2 id="如何将一个冷信号转化成热信号广播">如何将一个冷信号转化成热信号——广播</h2>
+
+<p>冷信号与热信号的本质区别在于是否保持状态，冷信号的多次订阅是不保持状态的，而热信号的多次订阅可以保持状态。所以一种将冷信号转换为热信号的方法就是，将冷信号订阅，订阅到的每一个时间通过<code class="highlighter-rouge">RACSbuject</code>发送出去，其他订阅者只订阅这个<code class="highlighter-rouge">RACSubject</code>。</p>
+
+<p>观察下面的代码：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code><span class="n">RACSignal</span> <span class="o">*</span><span class="n">coldSignal</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">createSignal</span><span class="p">:</span><span class="o">^</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">(</span><span class="n">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Cold signal be subscribed."</span><span class="p">);</span>
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+<span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"A"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">3</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+<span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"B"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+<span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendCompleted</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+<span class="p">}];</span>
+    
+<span class="n">RACSubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSubject</span> <span class="nf">subject</span><span class="p">];</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subject created."</span><span class="p">);</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">2</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">coldSignal</span> <span class="nf">subscribe</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="p">}];</span>
+    
+<span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 1 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">4</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">subject</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscriber 2 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+</code></pre>
+</div>
+<p>执行顺序是这样的：</p>
+
+<ol>
+  <li>创建一个冷信号：<code class="highlighter-rouge">coldSignal</code>。该信号声明了“订阅后1.5秒发送‘A’，3秒发送’B’，5秒发送完成事件”。</li>
+  <li>创建一个RACSubject：<code class="highlighter-rouge">subject</code>。</li>
+  <li>在2秒后使用这个<code class="highlighter-rouge">subject</code>订阅<code class="highlighter-rouge">coldSignal</code>。</li>
+  <li>立即订阅这个<code class="highlighter-rouge">subject</code>。</li>
+  <li>4秒后订阅这个<code class="highlighter-rouge">subject</code>。</li>
+</ol>
+
+<p>如果所料不错的话，通过订阅这个<code class="highlighter-rouge">subject</code>并不会引起<code class="highlighter-rouge">coldSignal</code>重复执行block的内容。我们来看下结果：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code>    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">19</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="mi">45</span><span class="p">.</span><span class="mi">703</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">14110</span><span class="o">:</span><span class="mi">1556061</span><span class="p">]</span> <span class="n">Subject</span> <span class="n">created</span><span class="p">.</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">19</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="mi">47</span><span class="p">.</span><span class="mi">705</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">14110</span><span class="o">:</span><span class="mi">1556061</span><span class="p">]</span> <span class="n">Cold</span> <span class="n">signal</span> <span class="n">be</span> <span class="n">subscribed</span><span class="p">.</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">19</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="mi">49</span><span class="p">.</span><span class="mi">331</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">14110</span><span class="o">:</span><span class="mi">1556061</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">recieve</span> <span class="n">value</span><span class="o">:</span><span class="n">A</span><span class="p">.</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">19</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="mi">50</span><span class="p">.</span><span class="mi">999</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">14110</span><span class="o">:</span><span class="mi">1556061</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">1</span> <span class="n">recieve</span> <span class="n">value</span><span class="o">:</span><span class="n">B</span><span class="p">.</span>
+    <span class="mi">2015</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">28</span> <span class="mi">19</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="mi">50</span><span class="p">.</span><span class="mi">999</span> <span class="n">RACDemos</span><span class="p">[</span><span class="mi">14110</span><span class="o">:</span><span class="mi">1556061</span><span class="p">]</span> <span class="n">Subscriber</span> <span class="mi">2</span> <span class="n">recieve</span> <span class="n">value</span><span class="o">:</span><span class="n">B</span><span class="p">.</span>
+</code></pre>
+</div>
+<p>参考时间线，会得到下图：<br />
+<img src="https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/100838_4.png" alt="Alt text" /></p>
+
+<p>不难发现其中的几个重点：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">subject</code>是从一开始就创建好的，等到2s后便开始订阅<code class="highlighter-rouge">coldSignal</code>。</li>
+  <li><code class="highlighter-rouge">Subscriber 1</code>是<code class="highlighter-rouge">subject</code>创建后就开始订阅的，但是第一个接收时间与<code class="highlighter-rouge">subject</code>接收<code class="highlighter-rouge">coldSignal</code>第一个值的时间是一样的。</li>
+  <li><code class="highlighter-rouge">Subscriber 2</code>是<code class="highlighter-rouge">subject</code>创建4s后开始订阅的，所以只能接收到第二个值。</li>
+</ol>
+
+<p>通过观察可以确定，<code class="highlighter-rouge">subject</code>就是<code class="highlighter-rouge">coldSignal</code>转化的热信号。所以使用<code class="highlighter-rouge">RACSubject</code>来将冷信号转化为热信号是可行的。</p>
+
+<p>当然，使用这种<code class="highlighter-rouge">RACSubject</code>来订阅冷信号得到热信号的方式仍有一些小的瑕疵。例如<code class="highlighter-rouge">subject</code>的订阅者提前终止了订阅，而<code class="highlighter-rouge">subject</code>并不能终止对<code class="highlighter-rouge">coldSignal</code>的订阅。（<code class="highlighter-rouge">RACDisposable</code>是一个比较大的话题，我计划在其他的文章中详细阐述它，也希望感兴趣的同学自己来理解。）所以在RAC库中对于冷信号转化成热信号有如下标准的封装：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code>    <span class="k">-</span> <span class="p">(</span><span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="p">)</span><span class="n">publish</span><span class="p">;</span>
+    <span class="k">-</span> <span class="p">(</span><span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="p">)</span><span class="nf">multicast</span><span class="p">:(</span><span class="n">RACSubject</span> <span class="o">*</span><span class="p">)</span><span class="nv">subject</span><span class="p">;</span>
+    <span class="k">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replay</span><span class="p">;</span>
+    <span class="k">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replayLast</span><span class="p">;</span>
+    <span class="k">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replayLazily</span><span class="p">;</span>
+</code></pre>
+</div>
+<p>这5个方法中，最为重要的就是<code class="highlighter-rouge">- (RACMulticastConnection *)multicast:(RACSubject *)subject;</code>这个方法了，其他几个方法也是间接调用它的。我们来看看它的实现：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code>    <span class="c1">/// implementation RACSignal (Operations)
+</span>    <span class="k">-</span> <span class="p">(</span><span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="p">)</span><span class="nf">multicast</span><span class="p">:(</span><span class="n">RACSubject</span> <span class="o">*</span><span class="p">)</span><span class="nv">subject</span> <span class="p">{</span>
+<span class="p">[</span><span class="n">subject</span> <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -multicast: %@"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">subject</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACMulticastConnection</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithSourceSignal</span><span class="p">:</span><span class="n">self</span> <span class="nf">subject</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="k">return</span> <span class="n">connection</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="c1">/// implementation RACMulticastConnection
+</span>    
+    <span class="k">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="nf">initWithSourceSignal</span><span class="p">:(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="nv">source</span> <span class="nf">subject</span><span class="p">:(</span><span class="n">RACSubject</span> <span class="o">*</span><span class="p">)</span><span class="nv">subject</span> <span class="p">{</span>
+<span class="n">NSCParameterAssert</span><span class="p">(</span><span class="n">source</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">);</span>
+<span class="n">NSCParameterAssert</span><span class="p">(</span><span class="n">subject</span> <span class="o">!=</span> <span class="nb">nil</span><span class="p">);</span>
+    
+<span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nf">init</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">self</span> <span class="o">==</span> <span class="nb">nil</span><span class="p">)</span> <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+    
+<span class="n">_sourceSignal</span> <span class="o">=</span> <span class="n">source</span><span class="p">;</span>
+<span class="n">_serialDisposable</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACSerialDisposable</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="n">_signal</span> <span class="o">=</span> <span class="n">subject</span><span class="p">;</span>
+    
+<span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="cp">#pragma mark Connecting
+</span>    
+    <span class="k">-</span> <span class="p">(</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">)</span><span class="n">connect</span> <span class="p">{</span>
+<span class="n">BOOL</span> <span class="n">shouldConnect</span> <span class="o">=</span> <span class="n">OSAtomicCompareAndSwap32Barrier</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">_hasConnected</span><span class="p">);</span>
+    
+<span class="k">if</span> <span class="p">(</span><span class="n">shouldConnect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">serialDisposable</span><span class="p">.</span><span class="n">disposable</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">sourceSignal</span> <span class="nf">subscribe</span><span class="p">:</span><span class="n">_signal</span><span class="p">];</span>
+<span class="p">}</span>
+    
+<span class="k">return</span> <span class="n">self</span><span class="p">.</span><span class="n">serialDisposable</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="o">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">autoconnect</span> <span class="p">{</span>
+<span class="n">__block</span> <span class="k">volatile</span> <span class="kt">int32_t</span> <span class="n">subscriberCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    
+<span class="k">return</span> <span class="p">[[</span><span class="n">RACSignal</span>
+    <span class="nf">createSignal</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">OSAtomicIncrement32Barrier</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subscriberCount</span><span class="p">);</span>
+    
+        <span class="n">RACDisposable</span> <span class="o">*</span><span class="n">subscriptionDisposable</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">signal</span> <span class="nf">subscribe</span><span class="p">:</span><span class="n">subscriber</span><span class="p">];</span>
+        <span class="n">RACDisposable</span> <span class="o">*</span><span class="n">connectionDisposable</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">connect</span><span class="p">];</span>
+    
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACDisposable</span> <span class="nf">disposableWithBlock</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+            <span class="p">[</span><span class="n">subscriptionDisposable</span> <span class="nf">dispose</span><span class="p">];</span>
+    
+            <span class="k">if</span> <span class="p">(</span><span class="n">OSAtomicDecrement32Barrier</span><span class="p">(</span><span class="o">&amp;</span><span class="n">subscriberCount</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="p">[</span><span class="n">connectionDisposable</span> <span class="nf">dispose</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}];</span>
+    <span class="p">}]</span>
+    <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -autoconnect"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">signal</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p>虽然代码比较短但不是很好懂，大概来说明一下：</p>
+
+<ol>
+  <li>当<code class="highlighter-rouge">RACSignal</code>类的实例调用<code class="highlighter-rouge">- (RACMulticastConnection *)multicast:(RACSubject *)subject</code>时，以<code class="highlighter-rouge">self</code>和<code class="highlighter-rouge">subject</code>作为构造参数创建一个<code class="highlighter-rouge">RACMulticastConnection</code>实例。</li>
+  <li><code class="highlighter-rouge">RACMulticastConnection</code>构造的时候，保存<code class="highlighter-rouge">source</code>和<code class="highlighter-rouge">subject</code>作为成员变量，创建一个<code class="highlighter-rouge">RACSerialDisposable</code>对象，用于取消订阅。</li>
+  <li>当<code class="highlighter-rouge">RACMulticastConnection</code>类的实例调用<code class="highlighter-rouge">- (RACDisposable *)connect</code>这个方法的时候，判断是否是第一次。如果是的话<strong>用<code class="highlighter-rouge">_signal</code>这个成员变量来订阅<code class="highlighter-rouge">sourceSignal</code>之后返回<code class="highlighter-rouge">self.serialDisposable</code></strong>；否则直接返回<code class="highlighter-rouge">self.serialDisposable</code>。这里面订阅<code class="highlighter-rouge">sourceSignal</code>是重点。</li>
+  <li><code class="highlighter-rouge">RACMulticastConnection</code>的<code class="highlighter-rouge">signal</code>只读属性，就是一个热信号，订阅这个热信号就避免了各种副作用的问题。它会在<code class="highlighter-rouge">- (RACDisposable *)connect</code>第一次调用后，根据<code class="highlighter-rouge">sourceSignal</code>的订阅结果来传递事件。</li>
+  <li>想要确保第一次订阅就能成功订阅<code class="highlighter-rouge">sourceSignal</code>，可以使用<code class="highlighter-rouge">- (RACSignal *)autoconnect</code>这个方法，它保证了第一个订阅者触发<code class="highlighter-rouge">sourceSignal</code>的订阅，也保证了当返回的信号所有订阅者都关闭连接后<code class="highlighter-rouge">sourceSignal</code>被正确关闭连接。</li>
+</ol>
+
+<p>由于RAC是一个线程安全的框架，所以好奇的同学可以了解下“OSAtomic*”这一系列的原子操作。抛开这些应该不难理解上述代码。</p>
+
+<p>了解源码之后，这个方法的正确使用就清楚了，应该像这样：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code><span class="n">RACSignal</span> <span class="o">*</span><span class="n">coldSignal</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">createSignal</span><span class="p">:</span><span class="o">^</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">(</span><span class="n">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Cold signal be subscribed."</span><span class="p">);</span>
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"A"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">3</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"B"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendCompleted</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    
+    <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+<span class="p">}];</span>
+    
+<span class="n">RACSubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSubject</span> <span class="nf">subject</span><span class="p">];</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subject created."</span><span class="p">);</span>
+    
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">multicastConnection</span> <span class="o">=</span> <span class="p">[</span><span class="n">coldSignal</span> <span class="nf">multicast</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">hotSignal</span> <span class="o">=</span> <span class="n">multicastConnection</span><span class="p">.</span><span class="n">signal</span><span class="p">;</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">2</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">multicastConnection</span> <span class="nf">connect</span><span class="p">];</span>
+<span class="p">}];</span>
+    
+<span class="p">[</span><span class="n">hotSignal</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscribe 1 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">}];</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">4</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">hotSignal</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscribe 2 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+<span class="p">}];</span>
+</code></pre>
+</div>
+<p>或者这样：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code><span class="n">RACSignal</span> <span class="o">*</span><span class="n">coldSignal</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">createSignal</span><span class="p">:</span><span class="o">^</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">(</span><span class="n">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Cold signal be subscribed."</span><span class="p">);</span>
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"A"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">3</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="s">@"B"</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    <span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">5</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendCompleted</span><span class="p">];</span>
+    <span class="p">}];</span>
+    
+    
+    <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+<span class="p">}];</span>
+    
+<span class="n">RACSubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[</span><span class="n">RACSubject</span> <span class="nf">subject</span><span class="p">];</span>
+<span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subject created."</span><span class="p">);</span>
+    
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">multicastConnection</span> <span class="o">=</span> <span class="p">[</span><span class="n">coldSignal</span> <span class="nf">multicast</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">hotSignal</span> <span class="o">=</span> <span class="n">multicastConnection</span><span class="p">.</span><span class="n">autoconnect</span><span class="p">;</span>
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">2</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">hotSignal</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscribe 1 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+<span class="p">}];</span>
+    
+    
+<span class="p">[[</span><span class="n">RACScheduler</span> <span class="nf">mainThreadScheduler</span><span class="p">]</span> <span class="nf">afterDelay</span><span class="p">:</span><span class="mi">4</span> <span class="nf">schedule</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">hotSignal</span> <span class="nf">subscribeNext</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Subscribe 2 recieve value:%@."</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}];</span>
+<span class="p">}];</span>
+</code></pre>
+</div>
+<p>以上的两种写法和之前用Subject来传递的例子都可以得到相同的结果。</p>
+
+<p>下面再来看看其他几个方法的实现：</p>
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code>    <span class="c1">/// implementation RACSignal (Operations)
+</span>    <span class="k">-</span> <span class="p">(</span><span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="p">)</span><span class="n">publish</span> <span class="p">{</span>
+<span class="n">RACSubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACSubject</span> <span class="nf">subject</span><span class="p">]</span> <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -publish"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">multicast</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="k">return</span> <span class="n">connection</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="o">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replay</span> <span class="p">{</span>
+<span class="n">RACReplaySubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACReplaySubject</span> <span class="nf">subject</span><span class="p">]</span> <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -replay"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+    
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">multicast</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="p">[</span><span class="n">connection</span> <span class="nf">connect</span><span class="p">];</span>
+    
+<span class="k">return</span> <span class="n">connection</span><span class="p">.</span><span class="n">signal</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="o">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replayLast</span> <span class="p">{</span>
+<span class="n">RACReplaySubject</span> <span class="o">*</span><span class="n">subject</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACReplaySubject</span> <span class="nf">replaySubjectWithCapacity</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -replayLast"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+    
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">multicast</span><span class="p">:</span><span class="n">subject</span><span class="p">];</span>
+<span class="p">[</span><span class="n">connection</span> <span class="nf">connect</span><span class="p">];</span>
+    
+<span class="k">return</span> <span class="n">connection</span><span class="p">.</span><span class="n">signal</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+    <span class="o">-</span> <span class="p">(</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">)</span><span class="n">replayLazily</span> <span class="p">{</span>
+<span class="n">RACMulticastConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span> <span class="nf">multicast</span><span class="p">:[</span><span class="n">RACReplaySubject</span> <span class="nf">subject</span><span class="p">]];</span>
+<span class="k">return</span> <span class="p">[[</span><span class="n">RACSignal</span>
+    <span class="nf">defer</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="p">[</span><span class="n">connection</span> <span class="nf">connect</span><span class="p">];</span>
+        <span class="k">return</span> <span class="n">connection</span><span class="p">.</span><span class="n">signal</span><span class="p">;</span>
+    <span class="p">}]</span>
+    <span class="nf">setNameWithFormat</span><span class="p">:</span><span class="s">@"[%@] -replayLazily"</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">name</span><span class="p">];</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p>这几个方法的实现都相当简单，只是为了简化而封装，具体说明一下：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">- (RACMulticastConnection *)publish</code>就是帮忙创建了<code class="highlighter-rouge">RACSubject</code>。</li>
+  <li><code class="highlighter-rouge">- (RACSignal *)replay</code>就是用<code class="highlighter-rouge">RACReplaySubject</code>来作为<code class="highlighter-rouge">subject</code>，并立即执行<code class="highlighter-rouge">connect</code>操作，返回<code class="highlighter-rouge">connection.signal</code>。其作用是上面提到的<code class="highlighter-rouge">replay</code>功能，即后来的订阅者可以收到历史值。</li>
+  <li><code class="highlighter-rouge">- (RACSignal *)replayLast</code>就是用<code class="highlighter-rouge">Capacity</code>为1的<code class="highlighter-rouge">RACReplaySubject</code>来替换<code class="highlighter-rouge">- (RACSignal *)replay</code>的`subject。其作用是使后来订阅者只收到最后的历史值。</li>
+  <li><code class="highlighter-rouge">- (RACSignal *)replayLazily</code>和<code class="highlighter-rouge">- (RACSignal *)replay</code>的区别就是<code class="highlighter-rouge">replayLazily</code>会在第一次订阅的时候才订阅<code class="highlighter-rouge">sourceSignal</code>。</li>
+</ol>
+
+<p>所以，其实本质仍然是</p>
+
+<blockquote>
+  <p>使用一个Subject来订阅原始信号，并让其他订阅者订阅这个Subject，这个Subject就是热信号。</p>
+</blockquote>
+
+<p>现在再回过来看下之前<a href="http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-2.html">系列文章第二篇</a>中那个业务场景的例子，其实修改的方法很简单，就是在网络获取的<code class="highlighter-rouge">fetchData</code>这个信号后面，增加一个<code class="highlighter-rouge">replayLazily</code>变换，就不会出现网络请求重发6次的问题了。</p>
+
+<p>修改后的代码如下，大家可以试试：</p>
+
+<div class="language-objc highlighter-rouge"><pre class="highlight"><code><span class="n">self</span><span class="p">.</span><span class="n">sessionManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AFHTTPSessionManager</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithBaseURL</span><span class="p">:[</span><span class="n">NSURL</span> <span class="nf">URLWithString</span><span class="p">:</span><span class="s">@"http://api.xxxx.com"</span><span class="p">]];</span>
+    
+<span class="n">self</span><span class="p">.</span><span class="n">sessionManager</span><span class="p">.</span><span class="n">requestSerializer</span> <span class="o">=</span> <span class="p">[</span><span class="n">AFJSONRequestSerializer</span> <span class="nf">serializer</span><span class="p">];</span>
+<span class="n">self</span><span class="p">.</span><span class="n">sessionManager</span><span class="p">.</span><span class="n">responseSerializer</span> <span class="o">=</span> <span class="p">[</span><span class="n">AFJSONResponseSerializer</span> <span class="nf">serializer</span><span class="p">];</span>
+    
+<span class="err">@weakify</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">fetchData</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RACSignal</span> <span class="nf">createSignal</span><span class="p">:</span><span class="o">^</span><span class="n">RACDisposable</span> <span class="o">*</span><span class="p">(</span><span class="n">id</span><span class="o">&lt;</span><span class="n">RACSubscriber</span><span class="o">&gt;</span> <span class="n">subscriber</span><span class="p">)</span> <span class="p">{</span>
+    <span class="err">@strongify</span><span class="p">(</span><span class="n">self</span><span class="p">)</span>
+    <span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">task</span> <span class="o">=</span> <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">sessionManager</span> <span class="nf">GET</span><span class="p">:</span><span class="s">@"fetchData"</span> <span class="nf">parameters</span><span class="p">:@{</span><span class="s">@"someParameter"</span><span class="o">:</span> <span class="s">@"someValue"</span><span class="p">}</span> <span class="n">success</span><span class="o">:^</span><span class="p">(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">task</span><span class="p">,</span> <span class="n">id</span> <span class="n">responseObject</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendNext</span><span class="p">:</span><span class="n">responseObject</span><span class="p">];</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendCompleted</span><span class="p">];</span>
+    <span class="p">}</span> <span class="n">failure</span><span class="o">:^</span><span class="p">(</span><span class="n">NSURLSessionDataTask</span> <span class="o">*</span><span class="n">task</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="p">[</span><span class="n">subscriber</span> <span class="nf">sendError</span><span class="p">:</span><span class="n">error</span><span class="p">];</span>
+    <span class="p">}];</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">RACDisposable</span> <span class="nf">disposableWithBlock</span><span class="p">:</span><span class="o">^</span><span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">task</span><span class="p">.</span><span class="n">state</span> <span class="o">!=</span> <span class="n">NSURLSessionTaskStateCompleted</span><span class="p">)</span> <span class="p">{</span>
+            <span class="p">[</span><span class="n">task</span> <span class="nf">cancel</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}];</span>
+<span class="p">}]</span> <span class="nf">replayLazily</span><span class="p">];</span>  <span class="c1">// modify here!!
+</span>    
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">title</span> <span class="o">=</span> <span class="p">[</span><span class="n">fetchData</span> <span class="nf">flattenMap</span><span class="p">:</span><span class="o">^</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">value</span><span class="p">[</span><span class="s">@"title"</span><span class="p">]</span> <span class="nf">isKindOfClass</span><span class="p">:[</span><span class="n">NSString</span> <span class="nf">class</span><span class="p">]])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:</span><span class="n">value</span><span class="p">[</span><span class="s">@"title"</span><span class="p">]];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">error</span><span class="p">:[</span><span class="n">NSError</span> <span class="nf">errorWithDomain</span><span class="p">:</span><span class="s">@"some error"</span> <span class="nf">code</span><span class="p">:</span><span class="mi">400</span> <span class="nf">userInfo</span><span class="p">:@{</span><span class="s">@"originData"</span><span class="o">:</span> <span class="n">value</span><span class="p">}]];</span>
+    <span class="p">}</span>
+<span class="p">}];</span>
+    
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">desc</span> <span class="o">=</span> <span class="p">[</span><span class="n">fetchData</span> <span class="nf">flattenMap</span><span class="p">:</span><span class="o">^</span><span class="n">RACSignal</span> <span class="o">*</span><span class="p">(</span><span class="n">NSDictionary</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">value</span><span class="p">[</span><span class="s">@"desc"</span><span class="p">]</span> <span class="nf">isKindOfClass</span><span class="p">:[</span><span class="n">NSString</span> <span class="nf">class</span><span class="p">]])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:</span><span class="n">value</span><span class="p">[</span><span class="s">@"desc"</span><span class="p">]];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">error</span><span class="p">:[</span><span class="n">NSError</span> <span class="nf">errorWithDomain</span><span class="p">:</span><span class="s">@"some error"</span> <span class="nf">code</span><span class="p">:</span><span class="mi">400</span> <span class="nf">userInfo</span><span class="p">:@{</span><span class="s">@"originData"</span><span class="o">:</span> <span class="n">value</span><span class="p">}]];</span>
+    <span class="p">}</span>
+<span class="p">}];</span>
+    
+<span class="n">RACSignal</span> <span class="o">*</span><span class="n">renderedDesc</span> <span class="o">=</span> <span class="p">[</span><span class="n">desc</span> <span class="nf">flattenMap</span><span class="p">:</span><span class="o">^</span><span class="n">RACStream</span> <span class="o">*</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="n">RenderManager</span> <span class="o">*</span><span class="n">renderManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">RenderManager</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+    <span class="n">NSAttributedString</span> <span class="o">*</span><span class="n">rendered</span> <span class="o">=</span> <span class="p">[</span><span class="n">renderManager</span> <span class="nf">renderText</span><span class="p">:</span><span class="n">value</span> <span class="nf">error</span><span class="p">:</span><span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">error</span><span class="p">:</span><span class="n">error</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:</span><span class="n">rendered</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}];</span>
+    
+<span class="n">RAC</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">someLablel</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">=</span> <span class="p">[[</span><span class="n">title</span> <span class="nf">catchTo</span><span class="p">:[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:</span><span class="s">@"Error"</span><span class="p">]]</span>  <span class="nf">startWith</span><span class="p">:</span><span class="s">@"Loading..."</span><span class="p">];</span>
+<span class="n">RAC</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">originTextView</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="o">=</span> <span class="p">[[</span><span class="n">desc</span> <span class="nf">catchTo</span><span class="p">:[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:</span><span class="s">@"Error"</span><span class="p">]]</span> <span class="nf">startWith</span><span class="p">:</span><span class="s">@"Loading..."</span><span class="p">];</span>
+<span class="n">RAC</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">renderedTextView</span><span class="p">,</span> <span class="n">attributedText</span><span class="p">)</span> <span class="o">=</span> <span class="p">[[</span><span class="n">renderedDesc</span> <span class="nf">catchTo</span><span class="p">:[</span><span class="n">RACSignal</span> <span class="nf">return</span><span class="p">:[[</span><span class="n">NSAttributedString</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithString</span><span class="p">:</span><span class="s">@"Error"</span><span class="p">]]]</span> <span class="nf">startWith</span><span class="p">:[[</span><span class="n">NSAttributedString</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithString</span><span class="p">:</span><span class="s">@"Loading..."</span><span class="p">]];</span>
+    
+<span class="p">[[</span><span class="n">RACSignal</span> <span class="nf">merge</span><span class="p">:@[</span><span class="n">title</span><span class="p">,</span> <span class="n">desc</span><span class="p">,</span> <span class="n">renderedDesc</span><span class="p">]]</span> <span class="nf">subscribeError</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alertView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithTitle</span><span class="p">:</span><span class="s">@"Error"</span> <span class="nf">message</span><span class="p">:</span><span class="n">error</span><span class="p">.</span><span class="n">domain</span> <span class="n">delegate</span><span class="o">:</span><span class="nb">nil</span> <span class="n">cancelButtonTitle</span><span class="o">:</span><span class="s">@"OK"</span> <span class="n">otherButtonTitles</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="p">[</span><span class="n">alertView</span> <span class="nf">show</span><span class="p">];</span>
+<span class="p">}];</span>
+</code></pre>
+</div>
+
+<p>当然，细心的同学会发现这样修改，仍然有许多计算上的浪费，例如将<code class="highlighter-rouge">fetchData</code>转换为<code class="highlighter-rouge">title</code>的block会执行多次，将<code class="highlighter-rouge">fetchData</code>转换为<code class="highlighter-rouge">desc</code>的block也会执行多次。但是由于这些block都是无副作用的，计算量并不大，可以忽略不计。如果计算量大的，也需要对中间的信号进行热信号的转换。不过请不要忽略冷热信号的转换本身也是有计算代价的。</p>
+
+<p>好的，写到这里，我们终于揭开RAC中冷信号与热信号的全部面纱，也知道如何使用了。希望这个系列文章可以让大家更好地了解RAC，避免使用RAC遇到的误区。谢谢大家。</p>
+
+<p>美团iOS组有很多志同道合的小伙伴，对于各种技术都有着深入的了解，我们热忱地欢迎一切牛掰的小伙伴加入，共同学习，共同进步。（简历请发送到邮箱 liangsi02@meituan.com）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Objective-C%2C" rel="tag"># Objective-C,</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/02/%E8%8E%B7%E5%8F%96UDID/" rel="next" title="获取UDID">
+                <i class="fa fa-chevron-left"></i> 获取UDID
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/02/RAC2/" rel="prev" title="细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号">
+                细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="" />
+          <p class="site-author-name" itemprop="name"></p>
+           
+              <p class="site-description motion-element" itemprop="description">blog</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#细说reactivecocoa的冷信号与热信号三怎么处理冷信号与热信号"> <span class="nav-number">1</span> <span class="nav-text">细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#揭示热信号的本质"> <span class="nav-number">1.1</span> <span class="nav-text">揭示热信号的本质</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> </li></ol> </li></ol> </li></ol> </li></ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#如何将一个冷信号转化成热信号广播"> <span class="nav-number">1.2</span> <span class="nav-text">如何将一个冷信号转化成热信号——广播</span> </a> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child"> <ol class="nav-child">
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://jekyllrb.com">Jekyll</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/simpleyyt/jekyll-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

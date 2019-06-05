@@ -1,4 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-02-19T17:44:28+08:00</updated><id>http://localhost:4000/</id><title type="html">Linco</title><subtitle>blog</subtitle><entry><title type="html">获取UDID</title><link href="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/" rel="alternate" type="text/html" title="获取UDID" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID</id><content type="html" xml:base="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">&lt;h1 id=&quot;mdm获取udid的几个技术点&quot;&gt;MDM获取UDID的几个技术点&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-05T16:20:56+08:00</updated><id>http://localhost:4000/</id><title type="html">Linco</title><subtitle>blog</subtitle><entry><title type="html">日期格式化</title><link href="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/" rel="alternate" type="text/html" title="日期格式化" /><published>2018-03-04T00:00:00+08:00</published><updated>2018-03-04T00:00:00+08:00</updated><id>http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96</id><content type="html" xml:base="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/">&lt;h1 id=&quot;日期格式化&quot;&gt;日期格式化&lt;/h1&gt;
+
+&lt;p&gt;/*&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;日期格式化类&lt;/li&gt;
+  &lt;li&gt;API:&lt;/li&gt;
+  &lt;li&gt;G  Era 标志符  Text  AD&lt;br /&gt;
+y  年  Year  1996; 96&lt;br /&gt;
+M  年中的月份  Month  July; Jul; 07&lt;br /&gt;
+w  年中的周数  Number  27&lt;br /&gt;
+W  月份中的周数  Number  2&lt;br /&gt;
+D  年中的天数  Number  189&lt;br /&gt;
+d  月份中的天数  Number  10&lt;br /&gt;
+F  月份中的星期  Number  2&lt;br /&gt;
+E  星期中的天数  Text  Tuesday; Tue&lt;br /&gt;
+a  Am/pm 标记  Text  PM&lt;br /&gt;
+H  一天中的小时数（0-23）  Number  0&lt;br /&gt;
+k  一天中的小时数（1-24）  Number  24&lt;br /&gt;
+K  am/pm 中的小时数（0-11）  Number  0&lt;br /&gt;
+h  am/pm 中的小时数（1-12）  Number  12&lt;br /&gt;
+m  小时中的分钟数  Number  30&lt;br /&gt;
+s  分钟中的秒数  Number  55&lt;br /&gt;
+S  毫秒数  Number  978&lt;br /&gt;
+z  时区  General time zone  Pacific Standard Time; PST; GMT-08:00&lt;br /&gt;
+Z  时区  RFC 822 time zone  -0800&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;*/&lt;/p&gt;</content><author><name></name></author><summary type="html">日期格式化</summary></entry><entry><title type="html">获取UDID</title><link href="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/" rel="alternate" type="text/html" title="获取UDID" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID</id><content type="html" xml:base="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">&lt;h1 id=&quot;mdm获取udid的几个技术点&quot;&gt;MDM获取UDID的几个技术点&lt;/h1&gt;
 &lt;h2 id=&quot;mdm服务&quot;&gt;MDM服务&lt;/h2&gt;
 &lt;p&gt;MDM - Moblie Device Management
 介绍MDM的文章：
@@ -1222,84 +1249,4 @@ Next use &lt;code class=&quot;highlighter-rouge&quot;&gt;normal&lt;/code&gt; by 
 
 &lt;p&gt;&lt;img src=&quot;http://ww1.sinaimg.cn/large/81b78497jw1emfgts2pt4j21hc0u0k1c.jpg&quot; alt=&quot;Wallbase - dgnfly (wallbase.cc/wallpaper/1384450)&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Etiam luctus mauris at mi sollicitudin quis malesuada nibh porttitor. Vestibulum non dapibus magna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin feugiat hendrerit viverra. Phasellus sit amet nunc mauris, eu ultricies tellus. Sed a mi tortor, eleifend varius erat. Proin consectetur molestie tortor eu gravida. Cras placerat orci id arcu tristique ut rutrum justo pulvinar. Maecenas lacinia fringilla diam non bibendum. Aenean vel viverra turpis. Integer ut leo nisi. Pellentesque vehicula quam ut sapien convallis consequat. Aliquam ut arcu purus, eget tempor purus. Integer eu tellus quis erat tristique gravida eu vel lorem.&lt;/p&gt;</content><author><name></name></author><category term="Photo" /><category term="consectetur" /><summary type="html">Nunc dignissim volutpat enim, non sollicitudin purus dignissim id. Nam sit amet urna eu velit lacinia eleifend. Proin auctor rhoncus ligula nec aliquet. Donec sodales molestie lacinia. Curabitur dictum faucibus urna at convallis. Aliquam in lectus at urna rutrum porta. In lacus arcu, molestie ut vestibulum ut, rhoncus sed eros. Sed et elit vitae risus pretium consectetur vel in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempus turpis quis lectus rhoncus adipiscing. Proin pulvinar placerat suscipit. Maecenas imperdiet, quam vitae varius auctor, enim mauris vulputate sapien, nec laoreet neque diam non quam.</summary></entry><entry><title type="html">MathJax with Jekyll</title><link href="http://localhost:4000/opinion/2014/02/16/Mathjax-with-jekyll/" rel="alternate" type="text/html" title="MathJax with Jekyll" /><published>2014-02-16T00:00:00+08:00</published><updated>2014-02-16T00:00:00+08:00</updated><id>http://localhost:4000/opinion/2014/02/16/Mathjax-with-jekyll</id><content type="html" xml:base="http://localhost:4000/opinion/2014/02/16/Mathjax-with-jekyll/">&lt;p&gt;One of the rewards of switching my website to &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; is the
-ability to support &lt;strong&gt;MathJax&lt;/strong&gt;, which means I can write LaTeX-like equations that get
-nicely displayed in a web browser, like this one \( \sqrt{\frac{n!}{k!(n-k)!}} \) or
-this one \( x^2 + y^2 = r^2 \).&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;p&gt;&lt;img class=&quot;centered&quot; src=&quot;https://www.mathjax.org/badge/mj-logo.svg&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;whats-mathjax&quot;&gt;What’s MathJax?&lt;/h3&gt;
-
-&lt;p&gt;If you check MathJax website &lt;a href=&quot;http://www.mathjax.org/&quot;&gt;(www.mathjax.org)&lt;/a&gt; you’ll see
-that it &lt;em&gt;is an open source JavaScript display engine for mathematics that works in all
-browsers&lt;/em&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;how-to-implement-mathjax-with-jekyll&quot;&gt;How to implement MathJax with Jekyll&lt;/h3&gt;
-
-&lt;p&gt;I followed the instructions described by Dason Kurkiewicz for
-&lt;a href=&quot;http://dasonk.github.io/blog/2012/10/09/Using-Jekyll-and-Mathjax/&quot;&gt;using Jekyll and Mathjax&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Here are some important details. I had to modify the Ruby library for Markdown in
-my &lt;code class=&quot;highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; file. Now I’m using redcarpet so the corresponding line in the
-configuration file is: &lt;code class=&quot;highlighter-rouge&quot;&gt;markdown: redcarpet&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;To load the MathJax javascript, I added the following lines in my layout &lt;code class=&quot;highlighter-rouge&quot;&gt;page.html&lt;/code&gt;
-(located in my folder &lt;code class=&quot;highlighter-rouge&quot;&gt;_layouts&lt;/code&gt;)&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;script&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Of course you can choose a different file location in your jekyll layouts.&lt;/p&gt;
-
-&lt;h3 id=&quot;a-couple-of-examples&quot;&gt;A Couple of Examples&lt;/h3&gt;
-
-&lt;p&gt;Here’s a short list of examples. To know more about the details behind MathJax, you can
-always checked the provided documentation available at
-&lt;a href=&quot;http://docs.mathjax.org/en/latest/&quot;&gt;http://docs.mathjax.org/en/latest/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;I’m assuming you are familiar with LaTeX. However, you should know that MathJax does not
-have the exactly same behavior as LaTeX. By default, the &lt;strong&gt;tex2jax&lt;/strong&gt; preprocessor defines the
-LaTeX math delimiters, which are &lt;code class=&quot;highlighter-rouge&quot;&gt;\\(...\\)&lt;/code&gt; for in-line math, and &lt;code class=&quot;highlighter-rouge&quot;&gt;\\[...\\]&lt;/code&gt; for
-displayed equations. It also defines the TeX delimiters &lt;code class=&quot;highlighter-rouge&quot;&gt;$$...$$&lt;/code&gt; for displayed
-equations, but it does not define &lt;code class=&quot;highlighter-rouge&quot;&gt;$...$&lt;/code&gt; as in-line math delimiters. Fortunately,
-you can change these predefined specifications if you want to do so.&lt;/p&gt;
-
-&lt;p&gt;Let’s try a first example. Here’s a dummy equation:&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;a^2 + b^2 = c^2&lt;/script&gt;
-
-&lt;p&gt;How do you write such expression? Very simple: using &lt;strong&gt;double dollar&lt;/strong&gt; signs&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;To display inline math use &lt;code class=&quot;highlighter-rouge&quot;&gt;\\( ... \\)&lt;/code&gt; like this &lt;code class=&quot;highlighter-rouge&quot;&gt;\\( sin(x^2) \\)&lt;/code&gt; which gets
-rendered as \( sin(x^2) \)&lt;/p&gt;
-
-&lt;p&gt;Here’s another example using type &lt;code class=&quot;highlighter-rouge&quot;&gt;\mathsf&lt;/code&gt;&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Data&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PCs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;times&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Loadings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;which gets displayed as&lt;/p&gt;
-
-&lt;script type=&quot;math/tex; mode=display&quot;&gt;\mathsf{Data = PCs} \times \mathsf{Loadings}&lt;/script&gt;
-
-&lt;p&gt;Or even better:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;err&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;P&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathsf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;is displayed as&lt;/p&gt;
-
-&lt;p&gt;\[ \mathbf{X} = \mathbf{Z} \mathbf{P^\mathsf{T}} \]&lt;/p&gt;
-
-&lt;p&gt;If you want to use subscripts like this \( \mathbf{X}_{n,p} \) you need to scape the
-underscores with a backslash like so &lt;code class=&quot;highlighter-rouge&quot;&gt;\mathbf{X}\_{n,p}&lt;/code&gt;:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-r&quot; data-lang=&quot;r&quot;&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;X&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mathbf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;\_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;$$&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;will be displayed as&lt;/p&gt;
-
-&lt;p&gt;\[ \mathbf{X}_{n,p} = \mathbf{A}_{n,k} \mathbf{B}_{k,p} \]&lt;/p&gt;</content><author><name></name></author><category term="resources" /><category term="jekyll" /><summary type="html">One of the rewards of switching my website to Jekyll is the ability to support MathJax, which means I can write LaTeX-like equations that get nicely displayed in a web browser, like this one \( \sqrt{\frac{n!}{k!(n-k)!}} \) or this one \( x^2 + y^2 = r^2 \).</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://gastonsanchez.com/images/blog/mathjax_logo.png" /></entry></feed>
+&lt;p&gt;Etiam luctus mauris at mi sollicitudin quis malesuada nibh porttitor. Vestibulum non dapibus magna. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin feugiat hendrerit viverra. Phasellus sit amet nunc mauris, eu ultricies tellus. Sed a mi tortor, eleifend varius erat. Proin consectetur molestie tortor eu gravida. Cras placerat orci id arcu tristique ut rutrum justo pulvinar. Maecenas lacinia fringilla diam non bibendum. Aenean vel viverra turpis. Integer ut leo nisi. Pellentesque vehicula quam ut sapien convallis consequat. Aliquam ut arcu purus, eget tempor purus. Integer eu tellus quis erat tristique gravida eu vel lorem.&lt;/p&gt;</content><author><name></name></author><category term="Photo" /><category term="consectetur" /><summary type="html">Nunc dignissim volutpat enim, non sollicitudin purus dignissim id. Nam sit amet urna eu velit lacinia eleifend. Proin auctor rhoncus ligula nec aliquet. Donec sodales molestie lacinia. Curabitur dictum faucibus urna at convallis. Aliquam in lectus at urna rutrum porta. In lacus arcu, molestie ut vestibulum ut, rhoncus sed eros. Sed et elit vitae risus pretium consectetur vel in mi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi tempus turpis quis lectus rhoncus adipiscing. Proin pulvinar placerat suscipit. Maecenas imperdiet, quam vitae varius auctor, enim mauris vulputate sapien, nec laoreet neque diam non quam.</summary></entry></feed>

@@ -2,8 +2,169 @@
 <search>
   
     <entry>
-      <title></title>
-      <url>/2019/06/25/2018-02-02-RAC3/</url>
+      <title>日期格式化</title>
+      <url>/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/</url>
+      <content type="text">日期格式化
+
+/*
+
+  日期格式化类
+  API:
+  G  Era 标志符  Text  AD
+y  年  Year  1996; 96
+M  年中的月份  Month  July; Jul; 07
+w  年中的周数  Number  27
+W  月份中的周数  Number  2
+D  年中的天数  Number  189
+d  月份中的天数  Number  10
+F  月份中的星期  Number  2
+E  星期中的天数  Text  Tuesday; Tue
+a  Am/pm 标记  Text  PM
+H  一天中的小时数（0-23）  Number  0
+k  一天中的小时数（1-24）  Number  24
+K  am/pm 中的小时数（0-11）  Number  0
+h  am/pm 中的小时数（1-12）  Number  12
+m  小时中的分钟数  Number  30
+s  分钟中的秒数  Number  55
+S  毫秒数  Number  978
+z  时区  General time zone  Pacific Standard Time; PST; GMT-08:00
+Z  时区  RFC 822 time zone  -0800
+
+
+*/
+</content>
+      <categories>
+        
+      </categories>
+      <tags>
+        
+          <tag> Objective-C, </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title>获取UDID</title>
+      <url>/2018/02/02/%E8%8E%B7%E5%8F%96UDID/</url>
+      <content type="text">MDM获取UDID的几个技术点
+MDM服务
+MDM - Moblie Device Management
+介绍MDM的文章：
+https://www.jianshu.com/p/6112050ea31a
+MDM是服务于企业级应用的一种模式。
+MDM可以突破许多App Store应用的束缚。
+目前我实践的有获取UDID。
+
+还有一个功能会吸引一些人：静默更新(无提示的强制更新)。这个功能我没有进行过实验和验证，是从几个方面有提示和比较可信的推论。有兴趣的可以进一步研究。
+
+获取UDID的证书
+关于如何获取手机的UDID。目前可行的方法是通过安装描述文件来获取到设备的真实UDID。
+网上已经有许多相关的文章，大多数转载自这一篇：
+http://www.skyfox.org/safari-ios-device-udid.html
+
+本文仅介绍iOS方面的技术点，这篇文章有关于证书上传服务器的内容。了解原理可以看看。想拿现成就用下面举例的内容，记得两点就行：1、更改自定义的内容；2、文件的格式为.mobileconfig
+
+描述文件举例：
+
+ &amp;lt;!--参考:https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/iPhoneOTAConfiguration/ConfigurationProfileExamples/ConfigurationProfileExamples.html--&amp;gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;
+&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
+    &amp;lt;dict&amp;gt;
+        &amp;lt;key&amp;gt;PayloadContent&amp;lt;/key&amp;gt;
+        &amp;lt;dict&amp;gt;
+            &amp;lt;key&amp;gt;URL&amp;lt;/key&amp;gt;
+            &amp;lt;string&amp;gt;你接受数据的URL&amp;lt;/string&amp;gt; &amp;lt;!--接收数据的接口地址--&amp;gt;
+            &amp;lt;key&amp;gt;DeviceAttributes&amp;lt;/key&amp;gt;
+            &amp;lt;array&amp;gt;
+                &amp;lt;string&amp;gt;UDID&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;IMEI&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;ICCID&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;VERSION&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;PRODUCT&amp;lt;/string&amp;gt;
+            &amp;lt;/array&amp;gt;
+        &amp;lt;/dict&amp;gt;
+        &amp;lt;key&amp;gt;PayloadOrganization&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示的组织者&amp;lt;/string&amp;gt;  &amp;lt;!--组织名称--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示标题&amp;lt;/string&amp;gt;  &amp;lt;!--安装时显示的标题--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;
+        &amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
+        &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;十六进制，格式为:8-4-4-4-12&amp;lt;/string&amp;gt;  &amp;lt;!--自己随机填写的唯一字符串--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;你的标识符&amp;lt;/string&amp;gt;
+        &amp;lt;key&amp;gt;PayloadDescription&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示内容&amp;lt;/string&amp;gt;   &amp;lt;!--描述--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;Profile Service&amp;lt;/string&amp;gt;
+    &amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+
+
+
+
+
+关于获取UDID的配置文件有上述的格式。
+URL是把UDID发送给服务器的接口
+array里面的信息是获取的设备信息
+PayloadOrganization是组织者标识
+PayloadDisplayName是显示的标题
+PayloadDescription是显示的描述
+
+证书的签名
+关于证书的签名有两种方式：使用SSL证书来进行签名；使用描述文件来进行签名
+
+我在处理的过程中使用的是SSL证书来进行签名。
+最好准备有如下六个文件：
+ca.crt  额，根证书
+ssl.crt 公钥
+ssl.pem 公钥的一种格式，还是公钥
+ssl.key 私钥
+unsign.mobileconfig 未签名配置文件
+sign.mobileconfig 已签名配置文件（占位作用，实际是未签名文件拷贝的）
+
+注意的是SSL证书的颁发机构要和CA证书是同一家。
+
+简单介绍一下ssl.crt和ssl.pem。ssl.crt和ssl.pem是可以互相导出的。
+这两个文件内容是一样的。区别在于格式。这个文件其实是ssl证书的私钥。pem是一种格式。一般情况下默认是这种格式。
+
+###ca.crt如何获取
+我在使用中用了两家公司的。一个是symantec GeoTrust。其实不论哪一家，都是可以获取到的，网上有很多方法，现在介绍一种简单粗暴的。
+Chrome中，访问官网，然后通过点击浏览器输入框的https:/****前的锁。来找到证书。拖动详情里的证书可以保存在电脑。(我改机构后使用的证书是和知乎的一样是RSA,GeoTrust官网的是SHA2。这个状态是补这篇博客的时候测试的)
+
+如果获取的证书的格式不正确，可以转换格式。转.pem来保证后续处理。
+
+ssl文件需要服务器的同事去请求。
+
+文件准备全之后。打开终端，进入到存放这些证书的文件夹。执行如下的命令
+
+openssl smime -sign -in sign.mobileconfig -out sign.mobileconfig -signer ssl.crt -inkey ssl.key -certfile ca.crt -outform der -nodetach
+
+
+上面的crt文件都可以改为pem文件.
+
+关于签名和未签名
+签名后的证书在安装的时候是绿色。未签名的证书是红色。
+签名的证书如果过期之后，浏览器可能显示出证书内容，是乱码。
+未签名证书也有可能被浏览器展示出来，是明文。
+
+</content>
+      <categories>
+        
+      </categories>
+      <tags>
+        
+          <tag> Objective-C, </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
+      <title>细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号</title>
+      <url>/2018/02/02/RAC3/</url>
       <content type="text">[转]细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号
 
 
@@ -507,13 +668,15 @@ RAC(self.renderedTextView, attributedText) = [[renderedDesc catchTo:[RACSignal r
       </categories>
       <tags>
         
+          <tag> Objective-C, </tag>
+        
       </tags>
       <tags></tags>
     </entry>
   
     <entry>
-      <title></title>
-      <url>/2019/06/25/2018-02-02-RAC2/</url>
+      <title>细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号</title>
+      <url>/2018/02/02/RAC2/</url>
       <content type="text">[转]细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号
 
 
@@ -657,13 +820,15 @@ RAC(self.renderedTextView, attributedText) = [[renderedDesc catchTo:[RACSign
       </categories>
       <tags>
         
+          <tag> Objective-C, </tag>
+        
       </tags>
       <tags></tags>
     </entry>
   
     <entry>
-      <title></title>
-      <url>/2019/06/25/2018-02-02-RAC1/</url>
+      <title>细说ReactiveCocoa的冷信号与热信号（一）</title>
+      <url>/2018/02/02/RAC1/</url>
       <content type="text">[转]细说ReactiveCocoa的冷信号与热信号（一）
 
 
@@ -804,165 +969,6 @@ NSLog(@&quot;Signal was created.&quot;);
 
 
 好的，至此我们知道了什么是冷信号与热信号，了解了它们的特点。下一篇文章我们来看看为什么要区分冷信号与热信号。
-</content>
-      <categories>
-        
-      </categories>
-      <tags>
-        
-      </tags>
-      <tags></tags>
-    </entry>
-  
-    <entry>
-      <title>日期格式化</title>
-      <url>/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/</url>
-      <content type="text">日期格式化
-
-/*
-
-  日期格式化类
-  API:
-  G  Era 标志符  Text  AD
-y  年  Year  1996; 96
-M  年中的月份  Month  July; Jul; 07
-w  年中的周数  Number  27
-W  月份中的周数  Number  2
-D  年中的天数  Number  189
-d  月份中的天数  Number  10
-F  月份中的星期  Number  2
-E  星期中的天数  Text  Tuesday; Tue
-a  Am/pm 标记  Text  PM
-H  一天中的小时数（0-23）  Number  0
-k  一天中的小时数（1-24）  Number  24
-K  am/pm 中的小时数（0-11）  Number  0
-h  am/pm 中的小时数（1-12）  Number  12
-m  小时中的分钟数  Number  30
-s  分钟中的秒数  Number  55
-S  毫秒数  Number  978
-z  时区  General time zone  Pacific Standard Time; PST; GMT-08:00
-Z  时区  RFC 822 time zone  -0800
-
-
-*/
-</content>
-      <categories>
-        
-      </categories>
-      <tags>
-        
-          <tag> Objective-C, </tag>
-        
-      </tags>
-      <tags></tags>
-    </entry>
-  
-    <entry>
-      <title>获取UDID</title>
-      <url>/2018/02/02/%E8%8E%B7%E5%8F%96UDID/</url>
-      <content type="text">MDM获取UDID的几个技术点
-MDM服务
-MDM - Moblie Device Management
-介绍MDM的文章：
-https://www.jianshu.com/p/6112050ea31a
-MDM是服务于企业级应用的一种模式。
-MDM可以突破许多App Store应用的束缚。
-目前我实践的有获取UDID。
-
-还有一个功能会吸引一些人：静默更新(无提示的强制更新)。这个功能我没有进行过实验和验证，是从几个方面有提示和比较可信的推论。有兴趣的可以进一步研究。
-
-获取UDID的证书
-关于如何获取手机的UDID。目前可行的方法是通过安装描述文件来获取到设备的真实UDID。
-网上已经有许多相关的文章，大多数转载自这一篇：
-http://www.skyfox.org/safari-ios-device-udid.html
-
-本文仅介绍iOS方面的技术点，这篇文章有关于证书上传服务器的内容。了解原理可以看看。想拿现成就用下面举例的内容，记得两点就行：1、更改自定义的内容；2、文件的格式为.mobileconfig
-
-描述文件举例：
-
- &amp;lt;!--参考:https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/iPhoneOTAConfiguration/ConfigurationProfileExamples/ConfigurationProfileExamples.html--&amp;gt;
-&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
-&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;
-&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
-    &amp;lt;dict&amp;gt;
-        &amp;lt;key&amp;gt;PayloadContent&amp;lt;/key&amp;gt;
-        &amp;lt;dict&amp;gt;
-            &amp;lt;key&amp;gt;URL&amp;lt;/key&amp;gt;
-            &amp;lt;string&amp;gt;你接受数据的URL&amp;lt;/string&amp;gt; &amp;lt;!--接收数据的接口地址--&amp;gt;
-            &amp;lt;key&amp;gt;DeviceAttributes&amp;lt;/key&amp;gt;
-            &amp;lt;array&amp;gt;
-                &amp;lt;string&amp;gt;UDID&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;IMEI&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;ICCID&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;VERSION&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;PRODUCT&amp;lt;/string&amp;gt;
-            &amp;lt;/array&amp;gt;
-        &amp;lt;/dict&amp;gt;
-        &amp;lt;key&amp;gt;PayloadOrganization&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示的组织者&amp;lt;/string&amp;gt;  &amp;lt;!--组织名称--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示标题&amp;lt;/string&amp;gt;  &amp;lt;!--安装时显示的标题--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;
-        &amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
-        &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;十六进制，格式为:8-4-4-4-12&amp;lt;/string&amp;gt;  &amp;lt;!--自己随机填写的唯一字符串--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;你的标识符&amp;lt;/string&amp;gt;
-        &amp;lt;key&amp;gt;PayloadDescription&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示内容&amp;lt;/string&amp;gt;   &amp;lt;!--描述--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;Profile Service&amp;lt;/string&amp;gt;
-    &amp;lt;/dict&amp;gt;
-&amp;lt;/plist&amp;gt;
-
-
-
-
-
-关于获取UDID的配置文件有上述的格式。
-URL是把UDID发送给服务器的接口
-array里面的信息是获取的设备信息
-PayloadOrganization是组织者标识
-PayloadDisplayName是显示的标题
-PayloadDescription是显示的描述
-
-证书的签名
-关于证书的签名有两种方式：使用SSL证书来进行签名；使用描述文件来进行签名
-
-我在处理的过程中使用的是SSL证书来进行签名。
-最好准备有如下六个文件：
-ca.crt  额，根证书
-ssl.crt 公钥
-ssl.pem 公钥的一种格式，还是公钥
-ssl.key 私钥
-unsign.mobileconfig 未签名配置文件
-sign.mobileconfig 已签名配置文件（占位作用，实际是未签名文件拷贝的）
-
-注意的是SSL证书的颁发机构要和CA证书是同一家。
-
-简单介绍一下ssl.crt和ssl.pem。ssl.crt和ssl.pem是可以互相导出的。
-这两个文件内容是一样的。区别在于格式。这个文件其实是ssl证书的私钥。pem是一种格式。一般情况下默认是这种格式。
-
-###ca.crt如何获取
-我在使用中用了两家公司的。一个是symantec GeoTrust。其实不论哪一家，都是可以获取到的，网上有很多方法，现在介绍一种简单粗暴的。
-Chrome中，访问官网，然后通过点击浏览器输入框的https:/****前的锁。来找到证书。拖动详情里的证书可以保存在电脑。(我改机构后使用的证书是和知乎的一样是RSA,GeoTrust官网的是SHA2。这个状态是补这篇博客的时候测试的)
-
-如果获取的证书的格式不正确，可以转换格式。转.pem来保证后续处理。
-
-ssl文件需要服务器的同事去请求。
-
-文件准备全之后。打开终端，进入到存放这些证书的文件夹。执行如下的命令
-
-openssl smime -sign -in sign.mobileconfig -out sign.mobileconfig -signer ssl.crt -inkey ssl.key -certfile ca.crt -outform der -nodetach
-
-
-上面的crt文件都可以改为pem文件.
-
-关于签名和未签名
-签名后的证书在安装的时候是绿色。未签名的证书是红色。
-签名的证书如果过期之后，浏览器可能显示出证书内容，是乱码。
-未签名证书也有可能被浏览器展示出来，是明文。
-
 </content>
       <categories>
         

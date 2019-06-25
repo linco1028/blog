@@ -1,134 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-05T16:20:56+08:00</updated><id>http://localhost:4000/</id><title type="html">Linco</title><subtitle>blog</subtitle><entry><title type="html">日期格式化</title><link href="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/" rel="alternate" type="text/html" title="日期格式化" /><published>2018-03-04T00:00:00+08:00</published><updated>2018-03-04T00:00:00+08:00</updated><id>http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96</id><content type="html" xml:base="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/">&lt;h1 id=&quot;日期格式化&quot;&gt;日期格式化&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://localhost:4000/atom.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-06-25T14:06:55+08:00</updated><id>http://localhost:4000/</id><title type="html">Linco</title><subtitle>blog</subtitle><entry><title type="html"></title><link href="http://localhost:4000/2019/06/25/2018-02-02-RAC3/" rel="alternate" type="text/html" title="" /><published>2019-06-25T14:06:55+08:00</published><updated>2019-06-25T14:06:55+08:00</updated><id>http://localhost:4000/2019/06/25/2018-02-02-RAC3</id><content type="html" xml:base="http://localhost:4000/2019/06/25/2018-02-02-RAC3/">&lt;h1 id=&quot;转细说reactivecocoa的冷信号与热信号三怎么处理冷信号与热信号&quot;&gt;[转]细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号&lt;/h1&gt;
 
-&lt;p&gt;/*&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;日期格式化类&lt;/li&gt;
-  &lt;li&gt;API:&lt;/li&gt;
-  &lt;li&gt;G  Era 标志符  Text  AD&lt;br /&gt;
-y  年  Year  1996; 96&lt;br /&gt;
-M  年中的月份  Month  July; Jul; 07&lt;br /&gt;
-w  年中的周数  Number  27&lt;br /&gt;
-W  月份中的周数  Number  2&lt;br /&gt;
-D  年中的天数  Number  189&lt;br /&gt;
-d  月份中的天数  Number  10&lt;br /&gt;
-F  月份中的星期  Number  2&lt;br /&gt;
-E  星期中的天数  Text  Tuesday; Tue&lt;br /&gt;
-a  Am/pm 标记  Text  PM&lt;br /&gt;
-H  一天中的小时数（0-23）  Number  0&lt;br /&gt;
-k  一天中的小时数（1-24）  Number  24&lt;br /&gt;
-K  am/pm 中的小时数（0-11）  Number  0&lt;br /&gt;
-h  am/pm 中的小时数（1-12）  Number  12&lt;br /&gt;
-m  小时中的分钟数  Number  30&lt;br /&gt;
-s  分钟中的秒数  Number  55&lt;br /&gt;
-S  毫秒数  Number  978&lt;br /&gt;
-z  时区  General time zone  Pacific Standard Time; PST; GMT-08:00&lt;br /&gt;
-Z  时区  RFC 822 time zone  -0800&lt;/li&gt;
-&lt;/ul&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;原文出自美团技术博客，美团博客中老连接已时效。该文章从网上转载，做记录使用。&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;*/&lt;/p&gt;</content><author><name></name></author><summary type="html">日期格式化</summary></entry><entry><title type="html">获取UDID</title><link href="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/" rel="alternate" type="text/html" title="获取UDID" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID</id><content type="html" xml:base="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">&lt;h1 id=&quot;mdm获取udid的几个技术点&quot;&gt;MDM获取UDID的几个技术点&lt;/h1&gt;
-&lt;h2 id=&quot;mdm服务&quot;&gt;MDM服务&lt;/h2&gt;
-&lt;p&gt;MDM - Moblie Device Management
-介绍MDM的文章：
-https://www.jianshu.com/p/6112050ea31a
-MDM是服务于企业级应用的一种模式。
-MDM可以突破许多App Store应用的束缚。
-目前我实践的有获取UDID。&lt;/p&gt;
-
-&lt;p&gt;还有一个功能会吸引一些人：静默更新(无提示的强制更新)。这个功能我没有进行过实验和验证，是从几个方面有提示和比较可信的推论。有兴趣的可以进一步研究。&lt;/p&gt;
-
-&lt;h2 id=&quot;获取udid的证书&quot;&gt;获取UDID的证书&lt;/h2&gt;
-&lt;p&gt;关于如何获取手机的UDID。目前可行的方法是通过安装描述文件来获取到设备的真实UDID。
-网上已经有许多相关的文章，大多数转载自这一篇：
-http://www.skyfox.org/safari-ios-device-udid.html&lt;/p&gt;
-
-&lt;p&gt;本文仅介绍iOS方面的技术点，这篇文章有关于证书上传服务器的内容。了解原理可以看看。想拿现成就用下面举例的内容，记得两点就行：1、更改自定义的内容；2、文件的格式为&lt;code class=&quot;highlighter-rouge&quot;&gt;.mobileconfig&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;描述文件举例：&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;!--参考:https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/iPhoneOTAConfiguration/ConfigurationProfileExamples/ConfigurationProfileExamples.html--&amp;gt;
-&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
-&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;
-&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
-    &amp;lt;dict&amp;gt;
-        &amp;lt;key&amp;gt;PayloadContent&amp;lt;/key&amp;gt;
-        &amp;lt;dict&amp;gt;
-            &amp;lt;key&amp;gt;URL&amp;lt;/key&amp;gt;
-            &amp;lt;string&amp;gt;你接受数据的URL&amp;lt;/string&amp;gt; &amp;lt;!--接收数据的接口地址--&amp;gt;
-            &amp;lt;key&amp;gt;DeviceAttributes&amp;lt;/key&amp;gt;
-            &amp;lt;array&amp;gt;
-                &amp;lt;string&amp;gt;UDID&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;IMEI&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;ICCID&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;VERSION&amp;lt;/string&amp;gt;
-                &amp;lt;string&amp;gt;PRODUCT&amp;lt;/string&amp;gt;
-            &amp;lt;/array&amp;gt;
-        &amp;lt;/dict&amp;gt;
-        &amp;lt;key&amp;gt;PayloadOrganization&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示的组织者&amp;lt;/string&amp;gt;  &amp;lt;!--组织名称--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示标题&amp;lt;/string&amp;gt;  &amp;lt;!--安装时显示的标题--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;
-        &amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
-        &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;十六进制，格式为:8-4-4-4-12&amp;lt;/string&amp;gt;  &amp;lt;!--自己随机填写的唯一字符串--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;你的标识符&amp;lt;/string&amp;gt;
-        &amp;lt;key&amp;gt;PayloadDescription&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;安装显示内容&amp;lt;/string&amp;gt;   &amp;lt;!--描述--&amp;gt;
-        &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;
-        &amp;lt;string&amp;gt;Profile Service&amp;lt;/string&amp;gt;
-    &amp;lt;/dict&amp;gt;
-&amp;lt;/plist&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/15281058755039.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;关于获取UDID的配置文件有上述的格式。
-&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;是把UDID发送给服务器的接口
-&lt;code class=&quot;highlighter-rouge&quot;&gt;array&lt;/code&gt;里面的信息是获取的设备信息
-&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadOrganization&lt;/code&gt;是组织者标识
-&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadDisplayName&lt;/code&gt;是显示的标题
-&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadDescription&lt;/code&gt;是显示的描述&lt;/p&gt;
-
-&lt;h2 id=&quot;证书的签名&quot;&gt;证书的签名&lt;/h2&gt;
-&lt;p&gt;关于证书的签名有两种方式：使用SSL证书来进行签名；使用描述文件来进行签名&lt;/p&gt;
-
-&lt;p&gt;我在处理的过程中使用的是SSL证书来进行签名。
-最好准备有如下六个文件：
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ca.crt&lt;/code&gt;  额，根证书
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt; 公钥
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt; 公钥的一种格式，还是公钥
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.key&lt;/code&gt; 私钥
-&lt;code class=&quot;highlighter-rouge&quot;&gt;unsign.mobileconfig&lt;/code&gt; 未签名配置文件
-&lt;code class=&quot;highlighter-rouge&quot;&gt;sign.mobileconfig&lt;/code&gt; 已签名配置文件（占位作用，实际是未签名文件拷贝的）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;注意的是SSL证书的颁发机构要和CA证书是同一家。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;简单介绍一下&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt;是可以互相导出的。
-这两个文件内容是一样的。区别在于格式。这个文件其实是ssl证书的私钥。pem是一种格式。一般情况下默认是这种格式。&lt;/p&gt;
-
-&lt;p&gt;###ca.crt如何获取
-我在使用中用了两家公司的。一个是&lt;code class=&quot;highlighter-rouge&quot;&gt;symantec&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;GeoTrust&lt;/code&gt;。其实不论哪一家，都是可以获取到的，网上有很多方法，现在介绍一种简单粗暴的。
-Chrome中，访问官网，然后通过点击浏览器输入框的&lt;code class=&quot;highlighter-rouge&quot;&gt;https:/****&lt;/code&gt;前的锁。来找到证书。拖动详情里的证书可以保存在电脑。(我改机构后使用的证书是和知乎的一样是RSA,GeoTrust官网的是SHA2。这个状态是补这篇博客的时候测试的)
-&lt;img src=&quot;https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/15282777076222.jpg&quot; alt=&quot;&quot; /&gt;
-如果获取的证书的格式不正确，可以转换格式。转&lt;code class=&quot;highlighter-rouge&quot;&gt;.pem&lt;/code&gt;来保证后续处理。&lt;/p&gt;
-
-&lt;p&gt;ssl文件需要服务器的同事去请求。&lt;/p&gt;
-
-&lt;p&gt;文件准备全之后。打开终端，进入到存放这些证书的文件夹。执行如下的命令&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl smime -sign -in sign.mobileconfig -out sign.mobileconfig -signer ssl.crt -inkey ssl.key -certfile ca.crt -outform der -nodetach
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;crt文件&lt;/code&gt;都可以改为&lt;code class=&quot;highlighter-rouge&quot;&gt;pem文件&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;关于签名和未签名&quot;&gt;关于签名和未签名&lt;/h2&gt;
-&lt;p&gt;签名后的证书在安装的时候是绿色。未签名的证书是红色。
-签名的证书如果过期之后，浏览器可能显示出证书内容，是乱码。
-未签名证书也有可能被浏览器展示出来，是明文。&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">MDM获取UDID的几个技术点 MDM服务 MDM - Moblie Device Management 介绍MDM的文章： https://www.jianshu.com/p/6112050ea31a MDM是服务于企业级应用的一种模式。 MDM可以突破许多App Store应用的束缚。 目前我实践的有获取UDID。</summary></entry><entry><title type="html">细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号</title><link href="http://localhost:4000/2018/02/02/RAC3/" rel="alternate" type="text/html" title="细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/RAC3</id><content type="html" xml:base="http://localhost:4000/2018/02/02/RAC3/">&lt;h1 id=&quot;细说reactivecocoa的冷信号与热信号三怎么处理冷信号与热信号&quot;&gt;细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html&quot;&gt;第一篇文章&lt;/a&gt;中我们介绍了冷信号与热信号的概念，&lt;a href=&quot;http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-2.html&quot;&gt;前一篇文章&lt;/a&gt;我们也讨论了为什么要区分冷信号与热信号，下面我会先为大家揭晓热信号的本质，再给出冷信号转换成热信号的方法。&lt;/p&gt;
+&lt;!--[第一篇文章](http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html)中我们介绍了冷信号与热信号的概念，[前一篇文章](http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-2.html)我们也讨论了为什么要区分冷信号与热信号，下面我会先为大家揭晓热信号的本质，再给出冷信号转换成热信号的方法。--&gt;
+&lt;p&gt;&lt;a href=&quot;https://linco1028.github.io/blog/2018/02/02/RAC1/&quot;&gt;第一篇文章&lt;/a&gt;中我们介绍了冷信号与热信号的概念，&lt;a href=&quot;https://linco1028.github.io/blog/2018/02/02/RAC2/&quot;&gt;第二篇文章&lt;/a&gt;我们也讨论了为什么要区分冷信号与热信号，下面我会先为大家揭晓热信号的本质，再给出冷信号转换成热信号的方法。&lt;/p&gt;
 
 &lt;h2 id=&quot;揭示热信号的本质&quot;&gt;揭示热信号的本质&lt;/h2&gt;
 
@@ -617,9 +494,14 @@ Chrome中，访问官网，然后通过点击浏览器输入框的&lt;code class
 
 &lt;p&gt;好的，写到这里，我们终于揭开RAC中冷信号与热信号的全部面纱，也知道如何使用了。希望这个系列文章可以让大家更好地了解RAC，避免使用RAC遇到的误区。谢谢大家。&lt;/p&gt;
 
-&lt;p&gt;美团iOS组有很多志同道合的小伙伴，对于各种技术都有着深入的了解，我们热忱地欢迎一切牛掰的小伙伴加入，共同学习，共同进步。（简历请发送到邮箱 liangsi02@meituan.com）&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">细说ReactiveCocoa的冷信号与热信号（三）：怎么处理冷信号与热信号</summary></entry><entry><title type="html">细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号</title><link href="http://localhost:4000/2018/02/02/RAC2/" rel="alternate" type="text/html" title="细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/RAC2</id><content type="html" xml:base="http://localhost:4000/2018/02/02/RAC2/">&lt;h1 id=&quot;细说reactivecocoa的冷信号与热信号二为什么要区分冷热信号&quot;&gt;细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号&lt;/h1&gt;
+&lt;p&gt;美团iOS组有很多志同道合的小伙伴，对于各种技术都有着深入的了解，我们热忱地欢迎一切牛掰的小伙伴加入，共同学习，共同进步。（简历请发送到邮箱 liangsi02@meituan.com）&lt;/p&gt;</content><author><name></name></author></entry><entry><title type="html"></title><link href="http://localhost:4000/2019/06/25/2018-02-02-RAC2/" rel="alternate" type="text/html" title="" /><published>2019-06-25T14:06:55+08:00</published><updated>2019-06-25T14:06:55+08:00</updated><id>http://localhost:4000/2019/06/25/2018-02-02-RAC2</id><content type="html" xml:base="http://localhost:4000/2019/06/25/2018-02-02-RAC2/">&lt;h1 id=&quot;转细说reactivecocoa的冷信号与热信号二为什么要区分冷热信号&quot;&gt;[转]细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号&lt;/h1&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html&quot;&gt;前一篇文章&lt;/a&gt;我们介绍了冷信号与热信号的概念，可能有同学会问了，为什么RAC要搞得如此复杂呢，只用一种信号不就行了么？要解释这个问题，需要绕一些圈子。&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;原文出自美团技术博客，美团博客中老连接已时效。该文章从网上转载，做记录使用。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;!--[前一篇文章](http://tech.meituan.com/talk-about-reactivecocoas-cold-signal-and-hot-signal-part-1.html)--&gt;
+&lt;p&gt;&lt;a href=&quot;https://linco1028.github.io/blog/2018/02/02/RAC1/&quot;&gt;前一篇文章&lt;/a&gt;我们介绍了冷信号与热信号的概念，可能有同学会问了，为什么RAC要搞得如此复杂呢，只用一种信号不就行了么？要解释这个问题，需要绕一些圈子。&lt;/p&gt;
 
 &lt;p&gt;前面可能比较难懂，如果不能很好理解，请仔细阅读相关文档。&lt;/p&gt;
 
@@ -748,7 +630,11 @@ RAC(self.renderedTextView, attributedText) = [[renderedDesc catchTo:[RACSign
 另外的3次订阅来自RACSignal类的merge方法。根据上述的描述，我们也可以猜测merge方法也一定是创建了一个新的信号，在这个信号被订阅的时候，把它包含的所有信号订阅。所以我们又得到了额外的3次网络请求。
 由此可以看到，不熟悉冷热信号对业务造成的影响。我们可以想象对用户流量的影响，对服务器负载的影响，对统计的影响，如果这是一个点赞的接口，会不会造成多次点赞？后果不堪设想啊。而这些都可以通过将fetchData转换为热信号来解决。
 接下来也许你会问，如果我的整个计算过程中都没有副作用，是否就不会有这个问题？答案是肯定的。试想下刚才那段代码如果没有网络请求，换成一些标准化的计算会怎样。虽然可以肯定它不会出现bug，但是不要忽视其中的运算也会执行多次。纯函数还有一个概念就是&lt;a href=&quot;https://en.wikipedia.org/wiki/Referential_transparency_%28computer_science%29&quot;&gt;引用透明&lt;/a&gt;)。在纯函数式语言（例如&lt;a href=&quot;https://www.haskell.org/&quot;&gt;Haskell&lt;/a&gt;）中对此可以进行一定的优化，也就是说纯函数的调用在相同参数下的返回值第二次不需要计算，所以在纯函数式语言里面的FRP并没有冷信号的担忧。然而Objective-C语言中并没有这种纯函数优化，因此有大规模运算的冷信号对性能是有一定影响的。
-从上文内容可以看出，如果我们想更好地掌握RAC这个框架，区分冷信号与热信号是十分重要的。接下来的系列第三篇文章，我会揭示冷信号与热信号的本质，帮助大家正确的理解冷信号与热信号。&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">细说ReactiveCocoa的冷信号与热信号（二）：为什么要区分冷热信号</summary></entry><entry><title type="html">细说ReactiveCocoa的冷信号与热信号（一）</title><link href="http://localhost:4000/2018/02/02/RAC1/" rel="alternate" type="text/html" title="细说ReactiveCocoa的冷信号与热信号（一）" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/RAC1</id><content type="html" xml:base="http://localhost:4000/2018/02/02/RAC1/">&lt;h1 id=&quot;细说reactivecocoa的冷信号与热信号一&quot;&gt;细说ReactiveCocoa的冷信号与热信号（一）&lt;/h1&gt;
+从上文内容可以看出，如果我们想更好地掌握RAC这个框架，区分冷信号与热信号是十分重要的。接下来的系列第三篇文章，我会揭示冷信号与热信号的本质，帮助大家正确的理解冷信号与热信号。&lt;/p&gt;</content><author><name></name></author></entry><entry><title type="html"></title><link href="http://localhost:4000/2019/06/25/2018-02-02-RAC1/" rel="alternate" type="text/html" title="" /><published>2019-06-25T14:06:55+08:00</published><updated>2019-06-25T14:06:55+08:00</updated><id>http://localhost:4000/2019/06/25/2018-02-02-RAC1</id><content type="html" xml:base="http://localhost:4000/2019/06/25/2018-02-02-RAC1/">&lt;h1 id=&quot;转细说reactivecocoa的冷信号与热信号一&quot;&gt;[转]细说ReactiveCocoa的冷信号与热信号（一）&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;原文出自美团技术博客，美团博客中老连接已时效。该文章从网上转载，做记录使用。&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;&lt;strong&gt;背景&lt;/strong&gt;&lt;/p&gt;
 
@@ -883,7 +769,135 @@ NSLog(@&quot;Signal was created.&quot;);
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;好的，至此我们知道了什么是冷信号与热信号，了解了它们的特点。下一篇文章我们来看看为什么要区分冷信号与热信号。&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">细说ReactiveCocoa的冷信号与热信号（一）</summary></entry><entry><title type="html">长图、截图、绘图</title><link href="http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/" rel="alternate" type="text/html" title="长图、截图、绘图" /><published>2017-11-27T00:00:00+08:00</published><updated>2017-11-27T00:00:00+08:00</updated><id>http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE%E3%80%81%E6%88%AA%E5%9B%BE%E3%80%81%E7%BB%98%E5%9B%BE</id><content type="html" xml:base="http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/">&lt;p&gt;关于图片绘制的内容有很多，很难用一篇文章来介绍。这篇文章只是在工作中遇到的情况。根据不同的情况来分别记录一下当时是怎么处理的。&lt;/p&gt;
+&lt;p&gt;好的，至此我们知道了什么是冷信号与热信号，了解了它们的特点。下一篇文章我们来看看为什么要区分冷信号与热信号。&lt;/p&gt;</content><author><name></name></author></entry><entry><title type="html">日期格式化</title><link href="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/" rel="alternate" type="text/html" title="日期格式化" /><published>2018-03-04T00:00:00+08:00</published><updated>2018-03-04T00:00:00+08:00</updated><id>http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96</id><content type="html" xml:base="http://localhost:4000/2018/03/04/%E6%97%A5%E6%9C%9F%E6%A0%BC%E5%BC%8F%E5%8C%96/">&lt;h1 id=&quot;日期格式化&quot;&gt;日期格式化&lt;/h1&gt;
+
+&lt;p&gt;/*&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;日期格式化类&lt;/li&gt;
+  &lt;li&gt;API:&lt;/li&gt;
+  &lt;li&gt;G  Era 标志符  Text  AD&lt;br /&gt;
+y  年  Year  1996; 96&lt;br /&gt;
+M  年中的月份  Month  July; Jul; 07&lt;br /&gt;
+w  年中的周数  Number  27&lt;br /&gt;
+W  月份中的周数  Number  2&lt;br /&gt;
+D  年中的天数  Number  189&lt;br /&gt;
+d  月份中的天数  Number  10&lt;br /&gt;
+F  月份中的星期  Number  2&lt;br /&gt;
+E  星期中的天数  Text  Tuesday; Tue&lt;br /&gt;
+a  Am/pm 标记  Text  PM&lt;br /&gt;
+H  一天中的小时数（0-23）  Number  0&lt;br /&gt;
+k  一天中的小时数（1-24）  Number  24&lt;br /&gt;
+K  am/pm 中的小时数（0-11）  Number  0&lt;br /&gt;
+h  am/pm 中的小时数（1-12）  Number  12&lt;br /&gt;
+m  小时中的分钟数  Number  30&lt;br /&gt;
+s  分钟中的秒数  Number  55&lt;br /&gt;
+S  毫秒数  Number  978&lt;br /&gt;
+z  时区  General time zone  Pacific Standard Time; PST; GMT-08:00&lt;br /&gt;
+Z  时区  RFC 822 time zone  -0800&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;*/&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">日期格式化</summary></entry><entry><title type="html">获取UDID</title><link href="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/" rel="alternate" type="text/html" title="获取UDID" /><published>2018-02-02T00:00:00+08:00</published><updated>2018-02-02T00:00:00+08:00</updated><id>http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID</id><content type="html" xml:base="http://localhost:4000/2018/02/02/%E8%8E%B7%E5%8F%96UDID/">&lt;h1 id=&quot;mdm获取udid的几个技术点&quot;&gt;MDM获取UDID的几个技术点&lt;/h1&gt;
+&lt;h2 id=&quot;mdm服务&quot;&gt;MDM服务&lt;/h2&gt;
+&lt;p&gt;MDM - Moblie Device Management
+介绍MDM的文章：
+https://www.jianshu.com/p/6112050ea31a
+MDM是服务于企业级应用的一种模式。
+MDM可以突破许多App Store应用的束缚。
+目前我实践的有获取UDID。&lt;/p&gt;
+
+&lt;p&gt;还有一个功能会吸引一些人：静默更新(无提示的强制更新)。这个功能我没有进行过实验和验证，是从几个方面有提示和比较可信的推论。有兴趣的可以进一步研究。&lt;/p&gt;
+
+&lt;h2 id=&quot;获取udid的证书&quot;&gt;获取UDID的证书&lt;/h2&gt;
+&lt;p&gt;关于如何获取手机的UDID。目前可行的方法是通过安装描述文件来获取到设备的真实UDID。
+网上已经有许多相关的文章，大多数转载自这一篇：
+http://www.skyfox.org/safari-ios-device-udid.html&lt;/p&gt;
+
+&lt;p&gt;本文仅介绍iOS方面的技术点，这篇文章有关于证书上传服务器的内容。了解原理可以看看。想拿现成就用下面举例的内容，记得两点就行：1、更改自定义的内容；2、文件的格式为&lt;code class=&quot;highlighter-rouge&quot;&gt;.mobileconfig&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;描述文件举例：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &amp;lt;!--参考:https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/iPhoneOTAConfiguration/ConfigurationProfileExamples/ConfigurationProfileExamples.html--&amp;gt;
+&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;
+&amp;lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&amp;gt;
+&amp;lt;plist version=&quot;1.0&quot;&amp;gt;
+    &amp;lt;dict&amp;gt;
+        &amp;lt;key&amp;gt;PayloadContent&amp;lt;/key&amp;gt;
+        &amp;lt;dict&amp;gt;
+            &amp;lt;key&amp;gt;URL&amp;lt;/key&amp;gt;
+            &amp;lt;string&amp;gt;你接受数据的URL&amp;lt;/string&amp;gt; &amp;lt;!--接收数据的接口地址--&amp;gt;
+            &amp;lt;key&amp;gt;DeviceAttributes&amp;lt;/key&amp;gt;
+            &amp;lt;array&amp;gt;
+                &amp;lt;string&amp;gt;UDID&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;IMEI&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;ICCID&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;VERSION&amp;lt;/string&amp;gt;
+                &amp;lt;string&amp;gt;PRODUCT&amp;lt;/string&amp;gt;
+            &amp;lt;/array&amp;gt;
+        &amp;lt;/dict&amp;gt;
+        &amp;lt;key&amp;gt;PayloadOrganization&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示的组织者&amp;lt;/string&amp;gt;  &amp;lt;!--组织名称--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示标题&amp;lt;/string&amp;gt;  &amp;lt;!--安装时显示的标题--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;
+        &amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
+        &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;十六进制，格式为:8-4-4-4-12&amp;lt;/string&amp;gt;  &amp;lt;!--自己随机填写的唯一字符串--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;你的标识符&amp;lt;/string&amp;gt;
+        &amp;lt;key&amp;gt;PayloadDescription&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;安装显示内容&amp;lt;/string&amp;gt;   &amp;lt;!--描述--&amp;gt;
+        &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;
+        &amp;lt;string&amp;gt;Profile Service&amp;lt;/string&amp;gt;
+    &amp;lt;/dict&amp;gt;
+&amp;lt;/plist&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/15281058755039.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;关于获取UDID的配置文件有上述的格式。
+&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;是把UDID发送给服务器的接口
+&lt;code class=&quot;highlighter-rouge&quot;&gt;array&lt;/code&gt;里面的信息是获取的设备信息
+&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadOrganization&lt;/code&gt;是组织者标识
+&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadDisplayName&lt;/code&gt;是显示的标题
+&lt;code class=&quot;highlighter-rouge&quot;&gt;PayloadDescription&lt;/code&gt;是显示的描述&lt;/p&gt;
+
+&lt;h2 id=&quot;证书的签名&quot;&gt;证书的签名&lt;/h2&gt;
+&lt;p&gt;关于证书的签名有两种方式：使用SSL证书来进行签名；使用描述文件来进行签名&lt;/p&gt;
+
+&lt;p&gt;我在处理的过程中使用的是SSL证书来进行签名。
+最好准备有如下六个文件：
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ca.crt&lt;/code&gt;  额，根证书
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt; 公钥
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt; 公钥的一种格式，还是公钥
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.key&lt;/code&gt; 私钥
+&lt;code class=&quot;highlighter-rouge&quot;&gt;unsign.mobileconfig&lt;/code&gt; 未签名配置文件
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sign.mobileconfig&lt;/code&gt; 已签名配置文件（占位作用，实际是未签名文件拷贝的）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意的是SSL证书的颁发机构要和CA证书是同一家。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;简单介绍一下&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt;。&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.crt&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ssl.pem&lt;/code&gt;是可以互相导出的。
+这两个文件内容是一样的。区别在于格式。这个文件其实是ssl证书的私钥。pem是一种格式。一般情况下默认是这种格式。&lt;/p&gt;
+
+&lt;p&gt;###ca.crt如何获取
+我在使用中用了两家公司的。一个是&lt;code class=&quot;highlighter-rouge&quot;&gt;symantec&lt;/code&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;GeoTrust&lt;/code&gt;。其实不论哪一家，都是可以获取到的，网上有很多方法，现在介绍一种简单粗暴的。
+Chrome中，访问官网，然后通过点击浏览器输入框的&lt;code class=&quot;highlighter-rouge&quot;&gt;https:/****&lt;/code&gt;前的锁。来找到证书。拖动详情里的证书可以保存在电脑。(我改机构后使用的证书是和知乎的一样是RSA,GeoTrust官网的是SHA2。这个状态是补这篇博客的时候测试的)
+&lt;img src=&quot;https://raw.githubusercontent.com/linco1028/blog/gh-pages/picture/15282777076222.jpg&quot; alt=&quot;&quot; /&gt;
+如果获取的证书的格式不正确，可以转换格式。转&lt;code class=&quot;highlighter-rouge&quot;&gt;.pem&lt;/code&gt;来保证后续处理。&lt;/p&gt;
+
+&lt;p&gt;ssl文件需要服务器的同事去请求。&lt;/p&gt;
+
+&lt;p&gt;文件准备全之后。打开终端，进入到存放这些证书的文件夹。执行如下的命令&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;openssl smime -sign -in sign.mobileconfig -out sign.mobileconfig -signer ssl.crt -inkey ssl.key -certfile ca.crt -outform der -nodetach
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;crt文件&lt;/code&gt;都可以改为&lt;code class=&quot;highlighter-rouge&quot;&gt;pem文件&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;关于签名和未签名&quot;&gt;关于签名和未签名&lt;/h2&gt;
+&lt;p&gt;签名后的证书在安装的时候是绿色。未签名的证书是红色。
+签名的证书如果过期之后，浏览器可能显示出证书内容，是乱码。
+未签名证书也有可能被浏览器展示出来，是明文。&lt;/p&gt;</content><author><name></name></author><category term="Objective-C," /><summary type="html">MDM获取UDID的几个技术点 MDM服务 MDM - Moblie Device Management 介绍MDM的文章： https://www.jianshu.com/p/6112050ea31a MDM是服务于企业级应用的一种模式。 MDM可以突破许多App Store应用的束缚。 目前我实践的有获取UDID。</summary></entry><entry><title type="html">长图、截图、绘图</title><link href="http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/" rel="alternate" type="text/html" title="长图、截图、绘图" /><published>2017-11-27T00:00:00+08:00</published><updated>2017-11-27T00:00:00+08:00</updated><id>http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE%E3%80%81%E6%88%AA%E5%9B%BE%E3%80%81%E7%BB%98%E5%9B%BE</id><content type="html" xml:base="http://localhost:4000/2017/11/27/%E9%95%BF%E5%9B%BE-%E6%88%AA%E5%9B%BE-%E7%BB%98%E5%9B%BE/">&lt;p&gt;关于图片绘制的内容有很多，很难用一篇文章来介绍。这篇文章只是在工作中遇到的情况。根据不同的情况来分别记录一下当时是怎么处理的。&lt;/p&gt;
 
 &lt;p&gt;[TOC]&lt;/p&gt;
 
